@@ -20,8 +20,12 @@ class ScrapeUserPage:
 
     activeDriver = None
 
-    def __init__(self, user="FridaySailer"):
+    def __init__(self, user="FridaySailer", mode=1):
         self.user = user
+        if mode == 2:
+            self.tweet_selector += ":nth-of-type(2)"
+            self.second_tweet_selector = self.second_tweet_selector[0:-2] + "3" + self.second_tweet_selector[-1:]
+            self.share_selector = self.tweet_selector + " " + "div[role='group'] div:nth-child(5)"
         self.activeDriver = self.driver()
 
 
@@ -63,10 +67,3 @@ class ScrapeUserPage:
             self.awaitDriver()
         finally:
             action()
-
-users = ["fridaysailer", "elonmusk", "realdonaldtrump"]
-for user in users:
-    scraper = ScrapeUserPage(user)
-    scraper.initAction(scraper.getLastTweetURLAction)
-    print(scraper.tweet_info["text"])
-    print("\n")
