@@ -13,9 +13,6 @@ class ScrapeUserPage:
     base_url = "https://twitter.com/"
     tweet_info = {}
     tweet_selector = "[data-testid='cellInnerDiv']"
-    second_tweet_selector = tweet_selector + ":nth-of-type(2)"
-    share_selector = tweet_selector + " " + "div[role='group'] div:nth-child(5)"
-    link_selector = "div[data-testid='Dropdown'] div"
 
     activeDriver = None
 
@@ -23,15 +20,15 @@ class ScrapeUserPage:
         self.user = user
         if mode == 2:
             self.tweet_selector += ":nth-of-type(2)"
-            self.second_tweet_selector = self.second_tweet_selector[0:-2] + "3" + self.second_tweet_selector[-1:]
-            self.share_selector = self.tweet_selector + " " + "div[role='group'] div:nth-child(5)"
         self.activeDriver = self.driver()
 
 
     def driver(self):
         options = Options()
+        options.add_argument('--headless')
         options.add_argument("--window-size=1920,1200")
-
+        user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
+        options.add_argument(f'user-agent={user_agent}')
 
         driver = webdriver.Chrome(options=options)
         driver.get(self.base_url + self.user)
@@ -39,27 +36,16 @@ class ScrapeUserPage:
 
     def awaitDriver(self):
         element = WebDriverWait(self.activeDriver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, self.second_tweet_selector))
+            EC.presence_of_element_located((By.CSS_SELECTOR, self.tweet_selector))
         )
 
     def getLastTweetAction(self):
             action = ActionChains(self.activeDriver)
             tweet = self.activeDriver.find_element(By.CSS_SELECTOR, self.tweet_selector)
-            second_tweet = self.activeDriver.find_element(By.CSS_SELECTOR, self.second_tweet_selector)
-            share_btn = self.activeDriver.find_element(By.CSS_SELECTOR, self.share_selector)
-
-            # need to scroll into view to click share btn
-            action.scroll_to_element(second_tweet)
-            action.pause(0.5)
-            action.click(share_btn)
-            action.pause(0.5)
-
-            action.click()
-            action.perform()
-            action.pause(0.5)
-
             self.tweet_info["tweet"] = tweet.text
-            self.tweet_info["tweet_url"] = pyperclip.paste()
+            action.click(tweet)
+            action.perform()
+            self.tweet_info["tweet_url"] = self.activeDriver.execute_script("return window.location.href")
             self.activeDriver.quit()
             return self.tweet_info
 
