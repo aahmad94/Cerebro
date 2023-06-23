@@ -58,7 +58,7 @@ class ScrapeUserPage:
             action.perform()
             action.pause(0.5)
 
-            self.tweet_info["text"] = tweet.text
+            self.tweet_info["tweet"] = tweet.text
             self.tweet_info["tweet_url"] = pyperclip.paste()
             self.activeDriver.quit()
             return self.tweet_info
