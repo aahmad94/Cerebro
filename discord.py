@@ -40,7 +40,12 @@ class TwitterToDiscord:
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
             webhook.execute()
 
-with open('alfonse_webhook_url.txt', 'r') as file:
+with open('webhook_urls/fridaysailer.txt', 'r') as file:
     webhook_url = file.read().strip()
     users = ["fridaysailer"]
+    twitter_to_discord1 = TwitterToDiscord(webhook_url, users)
+
+with open('webhook_urls/cerebro.txt', 'r') as file:
+    webhook_url = file.read().strip()
+    users = ["garyblack00"]
     twitter_to_discord1 = TwitterToDiscord(webhook_url, users)
