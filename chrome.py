@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-class ScrapeUserPage:
+class ParseTwitter:
     user = ""
     base_url = "https://twitter.com/"
     tweet_info = {}
@@ -16,10 +16,8 @@ class ScrapeUserPage:
 
     activeDriver = None
 
-    def __init__(self, user="FridaySailer", mode=1):
+    def __init__(self, user="FridaySailer"):
         self.user = user
-        if mode == 2:
-            self.tweet_selector += ":nth-of-type(2)"
         self.activeDriver = self.driver()
 
 
@@ -36,17 +34,33 @@ class ScrapeUserPage:
 
     def awaitDriver(self):
         element = WebDriverWait(self.activeDriver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, self.tweet_selector))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(4)"))
         )
 
     def getLastTweetAction(self):
             action = ActionChains(self.activeDriver)
-            tweet = self.activeDriver.find_element(By.CSS_SELECTOR, self.tweet_selector)
-            self.tweet_info["tweet"] = tweet.text
-            action.click(tweet)
+            tweets = self.activeDriver.find_elements(
+                By.CSS_SELECTOR, self.tweet_selector)
+            tweet_idx = 0
+            
+            for i in range(len(tweets)):
+                if "Pinned Tweet" not in tweets[i].text and "Promoted Tweet" not in tweets[1].text:
+                    tweet_idx = i
+                    break
+
+            next_tweet = tweets[tweet_idx + 1]
+            self.tweet_info["tweet"] = tweets[i].text
+
+            # move cursor to next_tweet and move up by y_offset for clickable surface
+            y_offset = next_tweet.size["height"] * 0.50
+            y_offset += tweets[tweet_idx].size["height"] * 0.33
+            action.move_to_element_with_offset(tweets[i+1], -260, y_offset * -1)
+            action.click()
             action.perform()
             self.tweet_info["tweet_url"] = self.activeDriver.execute_script("return window.location.href")
             self.activeDriver.quit()
+
             return self.tweet_info
 
     def initAction(self, action):
