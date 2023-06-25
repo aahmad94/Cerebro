@@ -1,2 +1,4 @@
 # Ignore Discord webhook URLs
-webhook_urls/
+assets/webhook_urls.txt
+assets/id_rsa
+assets/id_rsa.pub

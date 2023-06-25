@@ -1,5 +1,5 @@
 import time
-from chrome import ParseTwitter
+from parse_twitter import ParseTwitter
 from datetime import datetime, timedelta
 from discord_webhook import DiscordWebhook
 

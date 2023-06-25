@@ -19,7 +19,7 @@ The URL is not actually embedded in the HTML of the Twitter page, rather it's co
     print(copied_text)
 ```
 
-<img src="fridaysailor_parse.gif" width="1024" height="665.6"/>
+<img src="assets/fridaysailor_parse.gif" width="1024" height="665.6"/>
 
 ## Demo
 https://youtu.be/tFSkc74ynsE
