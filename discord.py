@@ -33,4 +33,4 @@ class TwitterToDiscord:
         # if posted within last few hours, tweet won't have month in header
         if month not in tweet_date and last_month not in tweet_date:
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
-            # webhook.execute()
+            webhook.execute()
