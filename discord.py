@@ -14,7 +14,6 @@ class TwitterToDiscord:
         self.get_user_tweets()
 
     def get_user_tweets(self):
-        while True:
             for user in self.users:
                 tweet = ParseTwitter(user)
                 tweet.initAction(tweet.getLastTweetAction)
@@ -25,7 +24,6 @@ class TwitterToDiscord:
                     self.tweets[tweet_url] = True
                     print(tweet_url)
                     self.fwd_tweet(tweet_text, tweet_url)
-            time.sleep(60)
 
     def fwd_tweet(self, tweet_text, tweet_url):
         date = datetime.now()

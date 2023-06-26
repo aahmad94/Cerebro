@@ -1,3 +1,5 @@
+import time
+
 from discord import TwitterToDiscord
 
 with open('assets/webhook_urls.txt', 'r') as file:
@@ -14,9 +16,11 @@ cerebro_webhook_url = file_contents[cerebro_index + len('cerebro_url='):].split(
 
 cerebro_users = ["garyblack00", "sawyermerritt", "lizannsonders",
             "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal"]
-cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users)
-   
-# friday_sailer_users = ["fridaysailer"]
-# fridaysailer = TwitterToDiscord(cerebro_webhook_url, friday_sailer_users)
+friday_sailer_users = ["fridaysailer"]
+
+while True:
+    cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users)
+    fridaysailer = TwitterToDiscord(cerebro_webhook_url, friday_sailer_users)
+    time.sleep(300)
 
 
