@@ -14,4 +14,4 @@ RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc
 RUN apt-get update -qqy --no-install-recommends && apt-get install -qqy --no-install-recommends google-chrome-stable
 
 # Set the command to run when the container starts
-CMD ["python3", "cerebro_bot.py"]
+CMD ["python3", "app.py"]
