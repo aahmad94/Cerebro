@@ -52,7 +52,7 @@ class ParseTwitter:
 
             # move cursor to next_tweet and move up by y_offset for clickable surface
             y_offset = next_tweet.size["height"] * 0.50
-            y_offset += tweets[tweet_idx].size["height"] * 0.33
+            y_offset += tweets[tweet_idx].size["height"] * 0.10
             action.move_to_element_with_offset(tweets[i+1], -260, y_offset * -1)
             action.click()
             action.perform()

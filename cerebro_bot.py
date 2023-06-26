@@ -14,8 +14,7 @@ cerebro_webhook_url = file_contents[cerebro_index + len('cerebro_url='):].split(
 
 
 
-cerebro_users = ["garyblack00", "sawyermerritt", "lizannsonders",
-            "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal"]
+cerebro_users = ["elonmusk"]
 friday_sailer_users = ["fridaysailer"]
 
 while True:
