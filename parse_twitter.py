@@ -20,7 +20,7 @@ class ParseTwitter:
 
     def driver(self):
         options = Options()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1200")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -55,8 +55,7 @@ class ParseTwitter:
             y_offset = next_tweet.size["height"] * 0.50
             y_offset += tweets[tweet_idx].size["height"] * 0.10
             action.move_to_element_with_offset(tweets[i+1], -260, 0)
-            action.context_click()
-            action.pause(8)
+            action.click()
             action.perform()
             self.tweet_info["tweet_url"] = self.activeDriver.execute_script("return window.location.href")
             self.activeDriver.quit()
