@@ -1,3 +1,5 @@
+import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -11,18 +13,18 @@ class ParseTwitter:
     tweet_info = {}
     tweet_selector = "[data-testid='cellInnerDiv']"
 
-    activeDriver = None
+    active_driver = None
 
     def __init__(self, user="FridaySailer"):
         self.user = user
-        self.activeDriver = self.driver()
+        self.active_driver = self.driver()
 
 
     def driver(self):
         options = Options()
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
-        options.add_argument("--window-size=1920,1200")
+        options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')
 
@@ -31,34 +33,39 @@ class ParseTwitter:
         return driver
 
     def awaitDriver(self):
-        element = WebDriverWait(self.activeDriver, 25).until(
+        element = WebDriverWait(self.active_driver, 30).until(
             EC.presence_of_element_located(
-                (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(4)"))
+                (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(3)"))
         )
 
     def getLastTweetAction(self):
-            action = ActionChains(self.activeDriver)
-            tweets = self.activeDriver.find_elements(
+            action = ActionChains(self.active_driver)
+            tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
-            tweet_idx = 0
-            
+            tweet = None
+            y_offset = 0
+
             for i in range(len(tweets)):
-                if "Pinned Tweet" not in tweets[i].text and "Promoted Tweet" not in tweets[1].text:
-                    tweet_idx = i
+                tweet = tweets[i]
+                y_offset += tweet.size["height"]
+                if "Pinned Tweet" not in tweets[i].text and "Promoted Tweet" not in tweets[i].text:
+                    self.tweet_selector += f":nth-of-type({i+1})"
                     break
 
-            next_tweet = tweets[tweet_idx + 1]
-            self.tweet_info["tweet"] = tweets[i].text
-            self.tweet_info["date"] = tweets[i].find_element(By.CSS_SELECTOR, 'time').text
+            avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
+            self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
+            self.tweet_info["text"] = tweet.text
 
-            # move cursor to next_tweet and move up by y_offset for clickable surface
-            y_offset = next_tweet.size["height"] * 0.50
-            y_offset += tweets[tweet_idx].size["height"] * 0.10
-            action.move_to_element_with_offset(tweets[i+1], -260, y_offset * -1)
+            y_offset -= int(tweet.size["height"] * 0.25)
+            action.pause(1)
+            action.scroll(0, 0, 0, y_offset)
+            action.move_to_element(avatar)
+            action.move_by_offset(0, 45)
             action.click()
             action.perform()
-            self.tweet_info["tweet_url"] = self.activeDriver.execute_script("return window.location.href")
-            self.activeDriver.quit()
+
+            self.tweet_info["tweet_url"] = self.active_driver.execute_script("return window.location.href;")
+            self.active_driver.quit()
 
             return self.tweet_info
 
