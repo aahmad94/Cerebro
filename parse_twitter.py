@@ -1,4 +1,4 @@
-import time
+import re
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -64,10 +64,21 @@ class ParseTwitter:
             action.click()
             action.perform()
 
-            self.tweet_info["tweet_url"] = self.active_driver.execute_script("return window.location.href;")
+            url = self.active_driver.execute_script(
+                "return window.location.href;")
+            self.tweet_info["tweet_url"] = self.formatUrl(url)
             self.active_driver.quit()
 
             return self.tweet_info
+
+    def formatUrl(self, url):
+        # Regex pattern to match the main URL including the tweet ID
+        pattern = r"(https?://twitter.com/.+/status/\d+)"
+
+        # Extract the main URL with tweet ID
+        match = re.search(pattern, url)
+        main_url = match.group(1) if match else None     
+        return main_url
 
     def initAction(self, action):
         try:

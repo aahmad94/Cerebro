@@ -1,4 +1,3 @@
-import time
 from parse_twitter import ParseTwitter
 from datetime import datetime, timedelta
 from discord_webhook import DiscordWebhook
@@ -13,17 +12,19 @@ class TwitterToDiscord:
         self.users = users
         self.get_user_tweets()
 
-    def get_user_tweets(self):
-            for user in self.users:
-                tweet = ParseTwitter(user)
-                tweet.initAction(tweet.getLastTweetAction)
-                tweet_date = tweet.tweet_info["date"]
-                tweet_url = tweet.tweet_info["tweet_url"]
 
-                if not self.tweets.get(tweet_url):
-                    self.tweets[tweet_url] = True
-                    print(tweet_url)
-                    self.fwd_tweet(tweet_date, tweet_url)
+    def get_user_tweets(self):
+        for user in self.users:
+            tweet = ParseTwitter(user)
+            tweet.initAction(tweet.getLastTweetAction)
+            tweet_date = tweet.tweet_info["date"]
+            tweet_url = tweet.tweet_info["tweet_url"]
+
+            # only fwd tweets not in dict & only after dict is initialized w/ n items
+            if not self.tweets.get(tweet_url) and len(self.tweets) >= len(self.users):
+                self.tweets[tweet_url] = True
+                self.fwd_tweet(tweet_date, tweet_url)
+                    
 
     def fwd_tweet(self, tweet_date, tweet_url):
         date = datetime.now()
@@ -34,3 +35,5 @@ class TwitterToDiscord:
         if month not in tweet_date and last_month not in tweet_date:
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
             webhook.execute()
+
+
