@@ -2,7 +2,7 @@ import re
 import urllib3
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -76,6 +76,9 @@ class ParseTwitter:
             self.active_driver.quit()
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}. Handling the error...")
+            return self.tweet_info
+        except TimeoutException:
+            print(f"Timeout error for user: {self.user}. Handling the error...")
             return self.tweet_info
         except urllib3.exceptions.MaxRetryError as e:
             print("MaxRetryError occurred:", str(e))
