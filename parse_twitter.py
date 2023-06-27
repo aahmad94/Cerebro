@@ -1,4 +1,5 @@
 import re
+import urllib3
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -76,6 +77,8 @@ class ParseTwitter:
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}. Handling the error...")
             return self.tweet_info
+        except urllib3.exceptions.MaxRetryError as e:
+            print("MaxRetryError occurred:", str(e))
         
         return self.tweet_info
 
