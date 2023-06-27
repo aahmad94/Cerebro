@@ -25,7 +25,6 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                self.tweets[tweet_url+"1"] = True
                 if len(self.tweets) >= len(self.users):
                     print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
                     self.fwd_tweet(tweet_date, tweet_url)
