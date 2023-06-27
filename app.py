@@ -16,7 +16,7 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 
 
 
-cerebro_users = ["garyblack00", "sawyermerritt", "lizannsonders",
+cerebro_users = ["wholemarsblog", "garyblack00", "sawyermerritt", "lizannsonders",
                  "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal"]
 friday_sailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "Overwatch", "NintendoAmerica", "shonenjump",
@@ -25,7 +25,7 @@ football_users = ["VALORANTLeaksEN", "Overwatch", "NintendoAmerica", "shonenjump
 while True:
     cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users)
     fridaysailer = TwitterToDiscord(cerebro_webhook_url, friday_sailer_users)
-    time.sleep(300)
     football = TwitterToDiscord(football_webhook_url, football_users)
+    time.sleep(60)
 
 

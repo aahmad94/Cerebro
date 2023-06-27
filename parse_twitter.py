@@ -1,6 +1,7 @@
 import re
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -10,7 +11,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 class ParseTwitter:
     user = ""
     base_url = "https://twitter.com/"
-    tweet_info = {}
+    tweet_info = {
+        "tweet_url": None,
+        "tweet": None,
+        "date": None,
+    }
     tweet_selector = "[data-testid='cellInnerDiv']"
 
     active_driver = None
@@ -39,6 +44,7 @@ class ParseTwitter:
         )
 
     def getLastTweetAction(self):
+        try: 
             action = ActionChains(self.active_driver)
             tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
@@ -48,7 +54,7 @@ class ParseTwitter:
             for i in range(len(tweets)):
                 tweet = tweets[i]
                 y_offset += tweet.size["height"]
-                if "Pinned Tweet" not in tweets[i].text and "Promoted Tweet" not in tweets[i].text:
+                if "Pinned Tweet" not in tweet.text and "Promoted Tweet" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
 
@@ -56,20 +62,22 @@ class ParseTwitter:
             self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
             self.tweet_info["text"] = tweet.text
 
-            y_offset -= int(tweet.size["height"] * 0.25)
-            action.pause(1)
+            y_offset -= int(tweet.size["height"] * 0.35)
+            action.pause(2)
             action.scroll(0, 0, 0, y_offset)
             action.move_to_element(avatar)
-            action.move_by_offset(0, 45)
+            action.move_by_offset(0, 50)
             action.click()
             action.perform()
 
-            url = self.active_driver.execute_script(
-                "return window.location.href;")
+            url = self.active_driver.execute_script("return window.location.href;")
             self.tweet_info["tweet_url"] = self.formatUrl(url)
             self.active_driver.quit()
-
+        except NoSuchElementException:
+            print("Element not found. Handling the error...")
             return self.tweet_info
+        
+        return self.tweet_info
 
     def formatUrl(self, url):
         # Regex pattern to match the main URL including the tweet ID
