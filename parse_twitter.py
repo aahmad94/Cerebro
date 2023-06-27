@@ -79,6 +79,7 @@ class ParseTwitter:
             return self.tweet_info
         except urllib3.exceptions.MaxRetryError as e:
             print("MaxRetryError occurred:", str(e))
+            return self.tweet_info
         
         return self.tweet_info
 
