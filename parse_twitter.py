@@ -74,7 +74,7 @@ class ParseTwitter:
             self.tweet_info["tweet_url"] = self.formatUrl(url)
             self.active_driver.quit()
         except NoSuchElementException:
-            print("Element not found. Handling the error...")
+            print(f"Element not found for user: {self.user}. Handling the error...")
             return self.tweet_info
         
         return self.tweet_info
