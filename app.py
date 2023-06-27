@@ -14,10 +14,8 @@ football_webhook_url = file_contents[football_index + len('football_url='):].spl
 fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):].split('\n', 1)[0]
 
 
-
-
-cerebro_users = ["wholemarsblog", "garyblack00", "sawyermerritt", "lizannsonders",
-                 "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal"]
+cerebro_users = ["FirstSquawk", "wholemarsblog", "garyblack00", "sawyermerritt", "lizannsonders",
+                 "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal", "scienceisstrat1"]
 friday_sailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "Overwatch", "NintendoAmerica", "shonenjump",
                   "DeadbyDaylight", "GenshinImpact", "Grim", "ghiblipicture"]
