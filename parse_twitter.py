@@ -39,10 +39,16 @@ class ParseTwitter:
         return driver
 
     def awaitDriver(self):
-        element = WebDriverWait(self.active_driver, 30).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(3)"))
-        )
+        try:
+            element = WebDriverWait(self.active_driver, 30).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(3)"))
+            )
+        except TimeoutException:
+            print(f"Timeout error for user: {self.user}. Handling the error...")
+            return self.tweet_info
+             
+        
 
     def getLastTweetAction(self):
         try: 
@@ -76,9 +82,6 @@ class ParseTwitter:
             self.active_driver.quit()
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}. Handling the error...")
-            return self.tweet_info
-        except TimeoutException:
-            print(f"Timeout error for user: {self.user}. Handling the error...")
             return self.tweet_info
         except urllib3.exceptions.MaxRetryError as e:
             print("MaxRetryError occurred:", str(e))
