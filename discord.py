@@ -3,11 +3,12 @@ from datetime import datetime, timedelta
 from discord_webhook import DiscordWebhook
 
 class TwitterToDiscord:
-    tweets = {}
-    webhook_url = ""
-    users = []
+    tweets = None
+    webhook_url = None
+    users = None
 
-    def __init__(self, webhook_url, users, mode=1):
+    def __init__(self, webhook_url, users, tweets):
+        self.tweets = tweets
         self.webhook_url = webhook_url
         self.users = users
         self.get_user_tweets()
@@ -20,6 +21,8 @@ class TwitterToDiscord:
             
             tweet_date = tweet.tweet_info["date"]
             tweet_url = tweet.tweet_info["tweet_url"]
+            print(f"tweets dict - {len(self.tweets)}")
+            print(f"users count - {len(self.users)}")
             print(tweet_url)
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
@@ -38,6 +41,6 @@ class TwitterToDiscord:
         if month not in tweet_date and last_month not in tweet_date:
             print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
-            webhook.execute()
+            # webhook.execute()
 
 

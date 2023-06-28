@@ -21,8 +21,8 @@ football_users = ["VALORANTLeaksEN", "ValorantUpdated", "riotgames",
                   "Overwatch", "NintendoAmerica", "DeadbyDaylight", "GenshinImpact", "lolesports"]
 
 while True:
-    cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users)
-    fridaysailer = TwitterToDiscord(cerebro_webhook_url, friday_sailer_users)
-    football = TwitterToDiscord(football_webhook_url, football_users)
+    cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users, {})
+    fridaysailer = TwitterToDiscord(cerebro_webhook_url, friday_sailer_users, {})
+    football = TwitterToDiscord(football_webhook_url, football_users, {})
 
 
