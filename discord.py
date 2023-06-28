@@ -13,7 +13,6 @@ class TwitterToDiscord:
         self.users = users
         self.get_user_tweets()
 
-
     def get_user_tweets(self):
         for user in self.users:
             tweet = ParseTwitter(user)
@@ -29,7 +28,6 @@ class TwitterToDiscord:
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, tweet_url)
                     
-
     def fwd_tweet(self, user, tweet_date, tweet_url):
         date = datetime.now()
         month = date.strftime('%b')

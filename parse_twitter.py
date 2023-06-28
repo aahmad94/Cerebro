@@ -17,7 +17,7 @@ class ParseTwitter:
         "tweet": None,
         "date": None,
     }
-    tweet_selector = "[data-testid='cellInnerDiv']"
+    tweet_selector = "[data-testid='tweet']"
 
     active_driver = None
 
@@ -42,7 +42,7 @@ class ParseTwitter:
         try:
             element = WebDriverWait(self.active_driver, 30).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, f"{self.tweet_selector}:nth-of-type(3)"))
+                    (By.CSS_SELECTOR, f"{self.tweet_selector}"))
             )
         except TimeoutException:
             print(f"Timeout error for user: {self.user}. Handling the error...")
@@ -64,6 +64,8 @@ class ParseTwitter:
                 if "Pinned Tweet" not in tweet.text and "Promoted Tweet" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
+                
+            print(self.tweet_selector)
 
             avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
             self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
