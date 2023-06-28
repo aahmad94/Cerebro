@@ -18,7 +18,7 @@ cerebro_users = ["FirstSquawk", "wholemarsblog", "garyblack00", "sawyermerritt",
                  "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal"]
 friday_sailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "ValorantUpdated", "riotgames", 
-                  "Overwatch", "NintendoAmerica", "DeadbyDaylight", "GenshinImpact", "lolesports"]
+                  "PlayOverwatch", "DeadbyDaylight", "GenshinImpact", "lolesports"]
 
 while True:
     cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users, {})
