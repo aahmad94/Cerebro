@@ -28,7 +28,7 @@ class ParseTwitter:
 
     def driver(self):
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -64,22 +64,22 @@ class ParseTwitter:
                 if "Pinned Tweet" not in tweet.text and "Promoted Tweet" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
+            if (tweet):
+                avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
+                self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
+                self.tweet_info["text"] = tweet.text
 
-            avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
-            self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
-            self.tweet_info["text"] = tweet.text
+                y_offset -= int(tweet.size["height"] * 0.35)
+                action.pause(2)
+                action.scroll(0, 0, 0, y_offset)
+                action.move_to_element(avatar)
+                action.move_by_offset(0, 50)
+                action.click()
+                action.perform()
 
-            y_offset -= int(tweet.size["height"] * 0.35)
-            action.pause(2)
-            action.scroll(0, 0, 0, y_offset)
-            action.move_to_element(avatar)
-            action.move_by_offset(0, 50)
-            action.click()
-            action.perform()
-
-            url = self.active_driver.execute_script("return window.location.href;")
-            self.tweet_info["tweet_url"] = self.formatUrl(url)
-            self.active_driver.quit()
+                url = self.active_driver.execute_script("return window.location.href;")
+                self.tweet_info["tweet_url"] = self.formatUrl(url)
+                self.active_driver.quit()
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}. Handling the error...")
             return self.tweet_info
