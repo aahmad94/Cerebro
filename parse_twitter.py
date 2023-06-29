@@ -60,10 +60,12 @@ class ParseTwitter:
 
             for i in range(len(tweets)):
                 tweet = tweets[i]
+                
                 y_offset += tweet.size["height"]
                 if "Pinned Tweet" not in tweet.text and "Promoted Tweet" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
+
             if (tweet):
                 avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
                 self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
