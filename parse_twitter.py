@@ -44,8 +44,9 @@ class ParseTwitter:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, f"{self.tweet_selector}"))
             )
-        except TimeoutException:
+        except TimeoutException(e):
             print(f"Timeout error for user: {self.user}. Handling the error...")
+            print(e)
             return self.tweet_info
              
         
