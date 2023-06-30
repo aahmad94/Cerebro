@@ -16,8 +16,8 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 
 # ToDo: create API endpoint to modify users list
 # ToDo: change 'users' terminology (maybe Tweeters)
-cerebro_users = ["FirstSquawk", "wholemarsblog", "garyblack00", "sawyermerritt", "lizannsonders",
-                 "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal, chamath"]
+cerebro_users = ["FirstSquawk", "garyblack00", "sawyermerritt", "lizannsonders",
+                 "unusual_whales", "elonmusk", "ICannot_Enough", "jpr007", "troyteslike", "marionawfal", "chamath", "davidsacks"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
@@ -27,7 +27,9 @@ football_dict = {}
 
 while True:
     cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
+    time.sleep(2)
     fridaysailer = TwitterToDiscord(cerebro_webhook_url, fridaysailer_users, fridaysailer_dict)
+    time.sleep(2)
     football = TwitterToDiscord(football_webhook_url, football_users, football_dict)
 
 

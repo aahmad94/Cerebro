@@ -69,7 +69,7 @@ class ParseTwitter:
     
     def driver(self, url):
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -129,11 +129,11 @@ class ParseTwitter:
             if (tweet):
                 avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
                 self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
-                self.tweet_info["text"] = tweet.text
+                self.tweet_info["text"] = tweet.find_elements(By.CSS_SELECTOR, 'span')[5].text
 
                 y_offset -= int(tweet.size["height"] * 0.35)
 
-                self.wait(1)
+                self.action.pause(1)
                 self.action.scroll(0, 0, 0, y_offset)
                 self.action.move_to_element(avatar)
                 self.action.move_by_offset(0, 50)

@@ -20,15 +20,21 @@ class TwitterToDiscord:
             
             tweet_date = tweet.tweet_info["date"]
             tweet_url = tweet.tweet_info["tweet_url"]
-            print(tweet_url)
+            tweet_text = tweet.tweet_info["text"]
+
+            text = None
+            if tweet_url:
+                text = user + f" {tweet_date}" + \
+                    "\n" + tweet_text + "\n" + tweet_url + "\n"
+                print(text)
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
-                    self.fwd_tweet(user, tweet_date, tweet_url)
+                    self.fwd_tweet(user, tweet_date, text)
                     
-    def fwd_tweet(self, user, tweet_date, tweet_url):
+    def fwd_tweet(self, user, tweet_date, tweet_text):
         date = datetime.now()
         month = date.strftime('%b')
         last_month = (date - timedelta(days=30)).strftime('%b')
@@ -36,7 +42,7 @@ class TwitterToDiscord:
         # if posted within last few hours, tweet won't have month in header
         if month not in tweet_date and last_month not in tweet_date:
             print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
-            webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
+            webhook = DiscordWebhook(url=self.webhook_url, content=tweet_text)
             webhook.execute()
 
 
