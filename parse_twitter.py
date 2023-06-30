@@ -101,10 +101,10 @@ class ParseTwitter:
             self.awaitElement(search_selector)
             input.send_keys(self.user)
 
-            self.wait(2)
+            self.wait(0.5)
             input.send_keys(Keys.ARROW_DOWN)
 
-            self.wait(2)
+            self.wait(0.5)
             input.send_keys(Keys.ARROW_DOWN)
             input.send_keys(Keys.ENTER)
         except NoSuchElementException as e:
@@ -132,7 +132,8 @@ class ParseTwitter:
                 self.tweet_info["text"] = tweet.text
 
                 y_offset -= int(tweet.size["height"] * 0.35)
-                self.action.pause(2)
+
+                self.wait(1)
                 self.action.scroll(0, 0, 0, y_offset)
                 self.action.move_to_element(avatar)
                 self.action.move_by_offset(0, 50)
