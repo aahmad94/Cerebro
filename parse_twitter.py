@@ -101,10 +101,10 @@ class ParseTwitter:
             self.awaitElement(search_selector)
             input.send_keys(self.user)
 
-            self.wait(0.5)
+            self.wait()
             input.send_keys(Keys.ARROW_DOWN)
 
-            self.wait(0.5)
+            self.wait()
             input.send_keys(Keys.ARROW_DOWN)
             input.send_keys(Keys.ENTER)
         except NoSuchElementException as e:
