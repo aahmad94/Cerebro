@@ -35,7 +35,7 @@ class ParseTwitter:
         self.action = ActionChains(self.active_driver)
 
     # used to let page elemenrs load before using CSS query selectors to find page elements
-    def wait(self, seconds=2):
+    def wait(self, seconds=3):
         self.action.pause(seconds)
         self.action.perform()
 
