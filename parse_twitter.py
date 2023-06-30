@@ -96,8 +96,10 @@ class ParseTwitter:
     def goToUser(self):
         try:
             self.wait()
-            input = self.active_driver.find_element(By.CSS_SELECTOR,
-                "input[data-testid='SearchBox_Search_Input']")
+            search_selector = "input[data-testid='SearchBox_Search_Input']"
+            input = self.active_driver.find_element(By.CSS_SELECTOR, search_selector)
+            self.awaitElement(search_selector)
+
             input.send_keys(self.user)
             self.wait()
 
@@ -108,7 +110,7 @@ class ParseTwitter:
             input.send_keys(Keys.ENTER)
             self.wait()
         except NoSuchElementException as e:
-            print(f"User {self.user} could not be found in search bar. Handling the error...")
+            print(f"User {self.user} could not be found in search bar")
 
 
     def getLastTweetAction(self):
