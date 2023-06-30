@@ -100,7 +100,11 @@ class ParseTwitter:
             input = self.active_driver.find_element(By.CSS_SELECTOR, search_selector)
             self.awaitElement(search_selector)
             input.send_keys(self.user)
+
+            self.wait(2)
             input.send_keys(Keys.ARROW_DOWN)
+
+            self.wait(2)
             input.send_keys(Keys.ARROW_DOWN)
             input.send_keys(Keys.ENTER)
         except NoSuchElementException as e:
