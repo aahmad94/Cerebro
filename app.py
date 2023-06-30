@@ -1,3 +1,5 @@
+import time
+
 from discord import TwitterToDiscord
 
 with open('assets/webhook_urls.txt', 'r') as file:
@@ -27,5 +29,6 @@ while True:
     cerebro = TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
     fridaysailer = TwitterToDiscord(cerebro_webhook_url, fridaysailer_users, fridaysailer_dict)
     football = TwitterToDiscord(football_webhook_url, football_users, football_dict)
+    time.sleep(60)
 
 

@@ -40,7 +40,7 @@ class ParseTwitter:
 
     def awaitDriver(self):
         try:
-            element = WebDriverWait(self.active_driver, 30).until(
+            element = WebDriverWait(self.active_driver, 60).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, f"{self.tweet_selector}"))
             )
