@@ -6,11 +6,18 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 class ParseTwitter:
-    user = ""
+    # required login to parse twitter
+    login_user = None
+    pwd = None
+
+    # tweet related info
+    user = None
+    login_url = "https://twitter.com/i/flow/login"
     base_url = "https://twitter.com/"
     tweet_info = {
         "tweet_url": None,
@@ -20,40 +27,92 @@ class ParseTwitter:
     tweet_selector = "[data-testid='tweet']"
 
     active_driver = None
+    action = None
 
     def __init__(self, user="FridaySailer"):
         self.user = user
-        self.active_driver = self.driver()
+        self.active_driver = self.driver(self.login_url)
+        self.action = ActionChains(self.active_driver)
+
+    # used to let page elemenrs load before using CSS query selectors to find page elements
+    def wait(self, seconds=2):
+        self.action.pause(seconds)
+        self.action.perform()
 
 
-    def driver(self):
+    # get Twitter login credentials
+    def getCreds(self):
+        with open('assets/credentials.txt', 'r') as file:
+            file_contents = file.read()
+
+        login_index = file_contents.find('login_user=')
+        pass_index = file_contents.find('pwd=')
+
+        self.login_user = file_contents[login_index + len('login_user='):].split('\n', 1)[0]
+        self.pwd = file_contents[pass_index + len('pwd='):].split('\n', 1)[0]
+
+    # navigate modal and login
+    def login(self):
+        try:
+            self.wait()
+            input = self.active_driver.find_element(By.CSS_SELECTOR, 'input')
+            input.send_keys(self.login_user)
+            input.send_keys(Keys.ENTER)
+            
+            self.wait()
+            input = self.active_driver.find_elements(By.CSS_SELECTOR, "input")[1]
+            input.send_keys(self.pwd)
+            input.send_keys(Keys.ENTER)
+        except NoSuchElementException as e:
+            print(f"User login input element not found for user: {self.user}. Handling the error...")
+    
+    
+    def driver(self, url):
         options = Options()
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')
-
         driver = webdriver.Chrome(options=options)
-        driver.get(self.base_url + self.user)
+        
+        driver.get(url)
         return driver
 
-    def awaitDriver(self):
+
+    def awaitElement(self, selector):
         try:
-            element = WebDriverWait(self.active_driver, 60).until(
+            element = WebDriverWait(self.active_driver, 25).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, f"{self.tweet_selector}"))
+                    (By.CSS_SELECTOR, selector))
             )
-        except TimeoutException(e):
-            print(f"Timeout error for user: {self.user}. Handling the error...")
+        except TimeoutException as e:
+            print(f"Timeout error for user: {self.user}. Unable to locate element with CSS selector '{self.tweet_selector}'")
             print(e)
-            return self.tweet_info
-             
-        
+            return self.tweet_info             
+
+
+    # after logging in, from Twitter feed, use search bar to find user
+    def goToUser(self):
+        try:
+            self.wait()
+            input = self.active_driver.find_element(By.CSS_SELECTOR,
+                "input[data-testid='SearchBox_Search_Input']")
+            input.send_keys(self.user)
+            self.wait()
+
+            input.send_keys(Keys.ARROW_DOWN)
+            self.wait()
+
+            input.send_keys(Keys.ARROW_DOWN)
+            input.send_keys(Keys.ENTER)
+            self.wait()
+        except NoSuchElementException as e:
+            print(f"User {self.user} could not be found in search bar. Handling the error...")
+
 
     def getLastTweetAction(self):
         try: 
-            action = ActionChains(self.active_driver)
             tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
             tweet = None
@@ -73,12 +132,12 @@ class ParseTwitter:
                 self.tweet_info["text"] = tweet.text
 
                 y_offset -= int(tweet.size["height"] * 0.35)
-                action.pause(2)
-                action.scroll(0, 0, 0, y_offset)
-                action.move_to_element(avatar)
-                action.move_by_offset(0, 50)
-                action.click()
-                action.perform()
+                self.action.pause(2)
+                self.action.scroll(0, 0, 0, y_offset)
+                self.action.move_to_element(avatar)
+                self.action.move_by_offset(0, 50)
+                self.action.click()
+                self.action.perform()
 
                 url = self.active_driver.execute_script("return window.location.href;")
                 self.tweet_info["tweet_url"] = self.formatUrl(url)
@@ -92,6 +151,7 @@ class ParseTwitter:
         
         return self.tweet_info
 
+
     def formatUrl(self, url):
         # Regex pattern to match the main URL including the tweet ID
         pattern = r"(https?://twitter.com/.+/status/\d+)"
@@ -101,8 +161,16 @@ class ParseTwitter:
         main_url = match.group(1) if match else None     
         return main_url
 
+    # handle login flow and query user page, then parse tweets via action
     def initAction(self, action):
         try:
-            self.awaitDriver()
+            self.awaitElement("div[aria-labelledby='modal-header']")
+        finally:
+            self.getCreds()
+            self.login()
+            self.goToUser()
+        
+        try: 
+            self.awaitElement(self.tweet_selector)
         finally:
             action()
