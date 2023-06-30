@@ -37,6 +37,6 @@ class TwitterToDiscord:
         if month not in tweet_date and last_month not in tweet_date:
             print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_url)
-            # webhook.execute()
+            webhook.execute()
 
 

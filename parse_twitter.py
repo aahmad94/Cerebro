@@ -99,16 +99,10 @@ class ParseTwitter:
             search_selector = "input[data-testid='SearchBox_Search_Input']"
             input = self.active_driver.find_element(By.CSS_SELECTOR, search_selector)
             self.awaitElement(search_selector)
-
             input.send_keys(self.user)
-            self.wait()
-
             input.send_keys(Keys.ARROW_DOWN)
-            self.wait()
-
             input.send_keys(Keys.ARROW_DOWN)
             input.send_keys(Keys.ENTER)
-            self.wait()
         except NoSuchElementException as e:
             print(f"User {self.user} could not be found in search bar")
 
