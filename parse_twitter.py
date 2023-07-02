@@ -82,7 +82,7 @@ class ParseTwitter:
 
     def awaitElement(self, selector):
         try:
-            element = WebDriverWait(self.active_driver, 25).until(
+            element = WebDriverWait(self.active_driver, 30).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, selector))
             )
@@ -113,7 +113,7 @@ class ParseTwitter:
 
     def getLastTweetAction(self):
         try: 
-            self.wait(5)
+            self.awaitElement(self.tweet_selector)
             tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
             tweet = None
