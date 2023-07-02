@@ -20,13 +20,9 @@ class TwitterToDiscord:
             
             tweet_date = tweet.tweet_info["date"]
             tweet_url = tweet.tweet_info["tweet_url"]
-            tweet_text = tweet.tweet_info["text"]
-            text = None
             if tweet_url:
                 # temporary fix to address Twitter changes
                 tweet_url = tweet_url.replace('twitter', 'vxtwitter')
-                text = user + f" {tweet_date}" + \
-                    "\n" + tweet_text + "\n" + tweet_url + "\n"
                 print(tweet_url)
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
