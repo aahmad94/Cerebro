@@ -113,6 +113,7 @@ class ParseTwitter:
 
     def getLastTweetAction(self):
         try: 
+            self.wait(5)
             tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
             tweet = None
