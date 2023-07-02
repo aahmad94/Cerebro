@@ -31,6 +31,9 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
+                # temporary fix to address Twitter changes
+                tweet_url.replace('twitter', 'vxtwitter')
+
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, text)
                     
@@ -43,6 +46,6 @@ class TwitterToDiscord:
         if month not in tweet_date and last_month not in tweet_date:
             print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
             webhook = DiscordWebhook(url=self.webhook_url, content=tweet_text)
-            webhook.execute()
+            # webhook.execute()
 
 
