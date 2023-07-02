@@ -32,7 +32,7 @@ class TwitterToDiscord:
             if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 # temporary fix to address Twitter changes
-                tweet_url.replace('twitter', 'vxtwitter')
+                tweet_url = tweet_url.replace('twitter', 'vxtwitter')
 
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, text)
