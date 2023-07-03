@@ -42,7 +42,7 @@ while True:
     else:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         TwitterToDiscord(football_webhook_url, football_users, football_dict)
-        time.sleep(15*60)        
+        time.sleep(20*60)        
         
 
         
