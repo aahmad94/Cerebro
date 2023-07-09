@@ -16,7 +16,7 @@ class TwitterToDiscord:
             
             tweet_url = tweet.tweet_info["tweet_url"]
             tweet_date = tweet.tweet_info["date"]
-            content = tweet.tweet_info["text"]
+            tweet_text = tweet.tweet_info["text"]
 
             # format text content to send
             content = None
