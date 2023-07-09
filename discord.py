@@ -20,14 +20,14 @@ class TwitterToDiscord:
 
             # format text content to send
             content = None
-            if tweet_url:
+            if tweet_url and tweet_date and tweet_text:
                 content = user + f" {tweet_date}" + \
                     "\n" + tweet_text + "\n\n" + tweet_url + "\n"
                 print(content)
                 print("-------------------------------------------------")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
-            if tweet_url and not self.tweets.get(tweet_url):
+            if tweet_url and content and len(content) > 1 and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, content)
