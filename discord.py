@@ -3,10 +3,6 @@ from datetime import datetime, timedelta
 from discord_webhook import DiscordWebhook
 
 class TwitterToDiscord:
-    tweets = None
-    webhook_url = None
-    users = None
-
     def __init__(self, webhook_url, users, tweets):
         self.tweets = tweets
         self.webhook_url = webhook_url
@@ -18,19 +14,25 @@ class TwitterToDiscord:
             tweet = ParseTwitter(user)
             tweet.initAction(tweet.getLastTweetAction)
             
-            tweet_date = tweet.tweet_info["date"]
             tweet_url = tweet.tweet_info["tweet_url"]
+            tweet_date = tweet.tweet_info["date"]
+            tweet_text = tweet.tweet_info["text"]
+
+            # format text content to send
+            content = None
             if tweet_url:
-                # temporary fix to address Twitter changes
-                tweet_url = tweet_url.replace('twitter', 'vxtwitter')
-                print(tweet_url)
+                content = user + f" {tweet_date}" + \
+                    "\n" + tweet_text + "\n\n" + tweet_url + "\n"
+                print(content)
+                print("-------------------------------------------------")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, tweet_url)
-                    
+
+                   
     def fwd_tweet(self, user, tweet_date, tweet_text):
         date = datetime.now()
         month = date.strftime('%b')
