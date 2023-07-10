@@ -30,7 +30,7 @@ class TwitterToDiscord:
             # format text content to send
             content = None
             if tweet_url and tweet_text:
-                content = f"{tweet_url} + \n\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
+                content = f"{tweet_url} \n\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
                 print(content)
                 print("-------------------------------------------------")
 
@@ -41,7 +41,7 @@ class TwitterToDiscord:
                     self.fwd_tweet(user, tweet_date, content)
 
     def ask_gpt(self, tweet_text):
-        prompt = "Provide context for the following Tweet:\n"
+        prompt = "Provide additional context for the following Tweet if needed, explain any acronyms:\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
         reply = chat.choices[0].message.content
