@@ -28,24 +28,24 @@ class TwitterToDiscord:
             tweet_text = tweet.tweet_info["text"]
 
             # format text content to send
-            content = None
-            if tweet_url and tweet_text:
-                content = tweet_url 
+            gpt_content = None
+            if tweet_text and len(tweet_text) > 10:
                 gpt_output = self.ask_gpt(tweet_text)
-                if 'Nothing to add' not in gpt_output:
-                    content += f"\n**ChatGPT additional context:**\n{gpt_output}\n"
-                print(content)
+                gpt_content = f"**ChatGPT additional context:** (click shaded area below)\n||{gpt_output}||\n"
+                print(tweet_url)
+                print(gpt_content)
             else:
-                print(f"Tweet URL failure for user: {user}\n")
+                print(f"Tweet failure for user: {user}\n")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
-            if tweet_url and content and len(tweet_text) > 5 and not self.tweets.get(tweet_url):
+            # TODO: and not self.tweets.get(tweet_url)
+            if tweet_url:
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
-                    self.fwd_tweet(user, tweet_date, content)
+                    self.fwd_tweet(user, tweet_date, tweet_url, gpt_content)
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain any not obvious acronyms or people mentioned in the following tweet, be succinct. If there's nothing to explain, reply with 'Nothing to add':\n"
+        prompt = "Provide additional context for the following tweet. Explain any unfamiliar terms or acronyms. Do you think the information in the tweet is likely to influence the market? Be succinct, aim to use less than 100 words in your reply.\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         try:
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
@@ -55,7 +55,7 @@ class TwitterToDiscord:
         reply = chat.choices[0].message.content
         return reply 
                    
-    def fwd_tweet(self, user, tweet_date, content):
+    def fwd_tweet(self, user, tweet_date, tweet_url, gpt_content):
         date = datetime.now()
         month = date.strftime('%b')
         last_month = (date - timedelta(days=30)).strftime('%b')
@@ -63,7 +63,8 @@ class TwitterToDiscord:
         # if posted within last few hours, tweet won't have month in header
         if month not in tweet_date and last_month not in tweet_date:
             print(f"FORWARDING TWEET -- user: {user}, date: {tweet_date}")
-            webhook = DiscordWebhook(url=self.webhook_url, content=content)
-            webhook.execute()
+            DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
+            if (gpt_content):
+                DiscordWebhook(url=self.webhook_url, content=gpt_content).execute
 
 
