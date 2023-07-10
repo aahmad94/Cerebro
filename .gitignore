@@ -3,3 +3,4 @@ assets/credentials.txt
 assets/id_rsa
 assets/id_rsa.pub
 assets/login.txt
+.env
