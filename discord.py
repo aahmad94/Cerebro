@@ -32,7 +32,7 @@ class TwitterToDiscord:
             if tweet_url and tweet_text:
                 content = tweet_url 
                 gpt_output = self.ask_gpt(tweet_text)
-                if 'Nothing to add' in gpt_output:
+                if 'Nothing to add' not in gpt_output:
                     content += f"\n**ChatGPT additional context:**\n{self.ask_gpt(gpt_output)}\n"
                 print(content)
             else:
