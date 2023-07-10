@@ -27,7 +27,7 @@ class TwitterToDiscord:
                 print("-------------------------------------------------")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
-            if tweet_url and content and len(content) > 1 and not self.tweets.get(tweet_url):
+            if tweet_url and content and len(tweet_text) > 5 and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, content)
