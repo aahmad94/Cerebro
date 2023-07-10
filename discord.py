@@ -29,17 +29,17 @@ class TwitterToDiscord:
 
             # format text content to send
             gpt_content = None
-            if tweet_text and len(tweet_text) > 10:
+            if tweet_text:
                 gpt_output = self.ask_gpt(tweet_text)
                 gpt_content = f"**ChatGPT additional context:** (click shaded area below)\n||{gpt_output}||\n"
+                print(tweet_date)
                 print(tweet_url)
                 print(gpt_content)
             else:
                 print(f"Tweet failure for user: {user}\n")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
-            # TODO: and not self.tweets.get(tweet_url)
-            if tweet_url:
+            if tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, tweet_date, tweet_url, gpt_content)
@@ -65,6 +65,6 @@ class TwitterToDiscord:
             print(f"FORWARDING TWEET -- user: {user}, date: {tweet_date}")
             DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
             if (gpt_content):
-                DiscordWebhook(url=self.webhook_url, content=gpt_content).execute
+                DiscordWebhook(url=self.webhook_url, content=gpt_content).execute()
 
 
