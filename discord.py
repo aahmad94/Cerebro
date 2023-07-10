@@ -30,9 +30,10 @@ class TwitterToDiscord:
             # format text content to send
             content = None
             if tweet_url and tweet_text:
-                content = f"{tweet_url} \n\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
+                content = tweet_url 
+                if not tweet_text == 'Nothing to add':
+                    content += f"\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
                 print(content)
-                print("-------------------------------------------------")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and content and len(tweet_text) > 5 and not self.tweets.get(tweet_url):
@@ -41,9 +42,13 @@ class TwitterToDiscord:
                     self.fwd_tweet(user, tweet_date, content)
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain any not obvious  acronyms used in the following tweet, be succinct and if there's nothing to explain, reply with 'Nothing to add':\n"
+        prompt = "Explain any not obvious  acronyms used in the following tweet, be succinct. If there's nothing to explain, reply with 'Nothing to add':\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
-        chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+        try:
+            chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+        except: 
+            print("ChatGPT API endpoint failure")
+            return "Nothing to add"
         reply = chat.choices[0].message.content
         return reply 
                    
@@ -54,7 +59,7 @@ class TwitterToDiscord:
 
         # if posted within last few hours, tweet won't have month in header
         if month not in tweet_date and last_month not in tweet_date:
-            print(f"forwarding tweet -- user: {user}, date: {tweet_date}")
+            print(f"FORWARDING TWEET -- user: {user}, date: {tweet_date}")
             webhook = DiscordWebhook(url=self.webhook_url, content=content)
             webhook.execute()
 
