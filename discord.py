@@ -33,10 +33,10 @@ class TwitterToDiscord:
                 content = tweet_url 
                 gpt_output = self.ask_gpt(tweet_text)
                 if 'Nothing to add' not in gpt_output:
-                    content += f"\n**ChatGPT additional context:**\n{self.ask_gpt(gpt_output)}\n"
+                    content += f"\n**ChatGPT additional context:**\n{gpt_output}\n"
                 print(content)
             else:
-                print(f"Tweet URL failure for user: {user}")
+                print(f"Tweet URL failure for user: {user}\n")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and content and len(tweet_text) > 5 and not self.tweets.get(tweet_url):
@@ -50,8 +50,8 @@ class TwitterToDiscord:
         try:
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
         except: 
-            print("ChatGPT API endpoint failure")
-            return "Nothing to add"
+            print("ChatGPT API endpoint failure\n")
+            return 'Nothing to add'
         reply = chat.choices[0].message.content
         return reply 
                    
