@@ -41,7 +41,7 @@ class TwitterToDiscord:
                     self.fwd_tweet(user, tweet_date, content)
 
     def ask_gpt(self, tweet_text):
-        prompt = "Provide additional context for the following Tweet if needed, explain any acronyms:\n"
+        prompt = "Provide additional context for the following Tweet if needed. Explain any acronyms as well and be succinct:\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
         reply = chat.choices[0].message.content
