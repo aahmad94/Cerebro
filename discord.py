@@ -31,9 +31,12 @@ class TwitterToDiscord:
             content = None
             if tweet_url and tweet_text:
                 content = tweet_url 
-                if not tweet_text == 'Nothing to add':
-                    content += f"\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
+                gpt_output = self.ask_gpt(tweet_text)
+                if not gpt_output == 'Nothing to add':
+                    content += f"\n**ChatGPT additional context:**\n{self.ask_gpt(gpt_output)}\n"
                 print(content)
+            else:
+                print(f"Tweet URL failure for user: {user}")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_url and content and len(tweet_text) > 5 and not self.tweets.get(tweet_url):
