@@ -45,7 +45,7 @@ class TwitterToDiscord:
                     self.fwd_tweet(user, tweet_date, content)
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain any not obvious  acronyms used in the following tweet, be succinct. If there's nothing to explain, reply with 'Nothing to add':\n"
+        prompt = "Explain any not obvious acronyms or people mentioned in the following tweet, be succinct. If there's nothing to explain, reply with 'Nothing to add':\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         try:
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
