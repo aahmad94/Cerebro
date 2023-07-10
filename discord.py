@@ -30,7 +30,7 @@ class TwitterToDiscord:
             # format text content to send
             content = None
             if tweet_url and tweet_text:
-                content = f"** ChatGPT additional context:**\n"+ self.ask_gpt(tweet_text) + "\n\n" + tweet_url + "\n"
+                content = f"{tweet_url} + \n\n**ChatGPT additional context:**\n{self.ask_gpt(tweet_text)}\n"
                 print(content)
                 print("-------------------------------------------------")
 
