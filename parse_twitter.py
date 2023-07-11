@@ -130,7 +130,6 @@ class ParseTwitter:
             if (tweet):
                 avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
                 self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
-                self.tweet_info["text"] = tweet.find_elements(By.CSS_SELECTOR, 'span')[5].text
 
                 y_offset -= int(tweet.size["height"] * 0.35)
 
@@ -141,8 +140,12 @@ class ParseTwitter:
                 self.action.click()
                 self.action.perform()
 
-                url = self.active_driver.execute_script("return window.location.href;")
-                self.tweet_info["tweet_url"] = self.formatUrl(url)
+                self.wait(1)
+                self.tweet_info["text"] = self.active_driver.find_element(
+                    By.CSS_SELECTOR, "[data-testid='tweetText']").text
+                self.tweet_info["tweet_url"] = self.formatUrl(
+                    self.active_driver.execute_script("return window.location.href;"))
+                
                 self.active_driver.quit()
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}. Handling the error...")
