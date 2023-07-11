@@ -37,8 +37,7 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Provide additional context for the following tweet. Don't restate or rephrase the content in the tweet." + \
-            "Explain any unfamiliar terms or acronyms. Aim to use less than 100 words in your reply.\n\n"
+        prompt = "Provide additional context for the following tweet. Do not restate or rephrase the content in the tweet. Explain any unfamiliar terms or acronyms. Aim to use less than 100 words in your reply.\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
@@ -58,7 +57,7 @@ class TwitterToDiscord:
         last_month = (date - timedelta(days=30)).strftime('%b')
 
  
-        print(f"FORWARDING TWEET -- user: {user}, date: {tweet_date}")
+        print(f"FORWARDING TWEET -- USER: {user}, DATE: {tweet_date}")
         DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
         if tweet_text:
             DiscordWebhook(url=self.webhook_url, content=self.ask_gpt(tweet_text)).execute()
