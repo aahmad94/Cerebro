@@ -52,6 +52,7 @@ class ParseTwitter:
         self.pwd = file_contents[pass_index + len('pwd='):].split('\n', 1)[0]
 
     # navigate modal and login
+    #TODO: save login token & re-use till expiry rather than login again (slow)
     def login(self):
         try:
             self.wait()
