@@ -47,7 +47,7 @@ class TwitterToDiscord:
             return 'Nothing to add'
 
         reply = chat.choices[0].message.content
-        reply = f"**ChatGPT additional context:** (click shaded area below)\n||{reply}||\n"
+        reply = f"**ChatGPT additional context:**\n||{reply}||\n"
         return reply 
                    
 
