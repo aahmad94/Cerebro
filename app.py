@@ -38,7 +38,7 @@ while True:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         # if now.weekday() == 4 and now.hour > 8 and now.hour < 13:
             # TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
-        time.sleep(5*60)
+        time.sleep(2.5*60)
     else:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(20*60)        
