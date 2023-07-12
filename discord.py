@@ -24,7 +24,6 @@ class TwitterToDiscord:
             tweet.initAction(tweet.getLastTweetAction)
             
             tweet_url = tweet.tweet_info["tweet_url"]
-            tweet_date = tweet.tweet_info["date"]
             tweet_text = tweet.tweet_info["text"]
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
@@ -33,7 +32,7 @@ class TwitterToDiscord:
                 print("\n" + tweet_url)
                 print(tweet_text + "\n")
                 if len(self.tweets) > len(self.users):
-                    self.fwd_tweet(user, tweet_date, tweet_url, tweet_text)
+                    self.fwd_tweet(user, tweet_url, tweet_text)
 
 
     def ask_gpt(self, tweet_text):
@@ -51,13 +50,9 @@ class TwitterToDiscord:
         return reply 
                    
 
-    def fwd_tweet(self, user, tweet_date, tweet_url, tweet_text):
+    def fwd_tweet(self, user, tweet_url, tweet_text):
         date = datetime.now()
-        month = date.strftime('%b')
-        last_month = (date - timedelta(days=30)).strftime('%b')
-
- 
-        print(f"FORWARDING TWEET -- USER: {user}, DATE: {tweet_date}")
+        print(f"FORWARDING TWEET -- USER: {user}, DATE: {date}")
         DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
         if tweet_text:
             DiscordWebhook(url=self.webhook_url, content=self.ask_gpt(tweet_text)).execute()
