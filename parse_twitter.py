@@ -129,27 +129,30 @@ class ParseTwitter:
                     break
 
             if (tweet):
-                avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
-                self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
+                try:
+                    avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
+                    self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
 
-                y_offset -= int(tweet.size["height"] * 0.35)
+                    y_offset -= int(tweet.size["height"] * 0.35)
 
-                self.action.pause(1)
-                self.action.scroll(0, 0, 0, y_offset)
-                self.action.move_to_element(avatar)
-                self.action.move_by_offset(0, 50)
-                self.action.click()
-                self.action.perform()
+                    self.action.pause(1)
+                    self.action.scroll(0, 0, 0, y_offset)
+                    self.action.move_to_element(avatar)
+                    self.action.move_by_offset(0, 50)
+                    self.action.click()
+                    self.action.perform()
 
-                self.wait(2)
-                self.tweet_info["text"] = self.active_driver.find_element(
-                    By.CSS_SELECTOR, "[data-testid='tweetText']").text
-                self.tweet_info["tweet_url"] = self.formatUrl(
-                    self.active_driver.execute_script("return window.location.href;"))
-                
-                self.active_driver.quit()
+                    self.wait(2)
+                    self.tweet_info["text"] = self.active_driver.find_element(
+                        By.CSS_SELECTOR, "[data-testid='tweetText']").text
+                    self.tweet_info["tweet_url"] = self.formatUrl(
+                        self.active_driver.execute_script("return window.location.href;"))
+                    
+                    self.active_driver.quit()
+                except: 
+                    print(f"Could not click into link itself for user {self.user}")
         except NoSuchElementException:
-            print(f"Element not found for user: {self.user}. Handling the error...")
+            print(f"Element not found for user: {self.user}")
             return self.tweet_info
         except urllib3.exceptions.MaxRetryError as e:
             print("MaxRetryError occurred:", str(e))
