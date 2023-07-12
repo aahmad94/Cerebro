@@ -141,7 +141,7 @@ class ParseTwitter:
                 self.action.click()
                 self.action.perform()
 
-                self.wait(1)
+                self.wait(2)
                 self.tweet_info["text"] = self.active_driver.find_element(
                     By.CSS_SELECTOR, "[data-testid='tweetText']").text
                 self.tweet_info["tweet_url"] = self.formatUrl(
