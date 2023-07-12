@@ -36,7 +36,7 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Provide additional context for the following tweet. Do not restate or rephrase the content in the tweet. Explain any unfamiliar terms or acronyms. Aim to use less than 100 words in your reply.\n\n"
+        prompt = "Provide additional context for the following tweet. Don't just restate or summarize the content in the tweet. Explain any unfamiliar terms or acronyms. Aim to use less than 100 words in your reply.\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
