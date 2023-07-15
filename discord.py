@@ -46,7 +46,7 @@ class TwitterToDiscord:
             return 'Nothing to add'
 
         reply = chat.choices[0].message.content
-        reply = f"**ChatGPT additional context:**\n||{reply}||\n"
+        reply = f"**ChatGPT additional context:**\n```{reply}```\n"
         return reply 
                    
 
@@ -56,5 +56,3 @@ class TwitterToDiscord:
         DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
         if tweet_text:
             DiscordWebhook(url=self.webhook_url, content=self.ask_gpt(tweet_text)).execute()
-
-
