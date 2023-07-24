@@ -37,7 +37,7 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Summarize the content in the tweet in a few 2 to 4 bullets. Be succinct and aim to use less than 100 words.\n\n"
+        prompt = "Summarize the content in the tweet in a few 1 to 2 bullets. Be succinct and aim to use less than 100 words.\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
