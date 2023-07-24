@@ -20,23 +20,23 @@ class TwitterToDiscord:
 
     def get_user_tweets(self):
         for user in self.users:
-            tweet = ParseTwitter(user)
-            tweet.initAction(tweet.getLastTweetAction)
+            parser = ParseTwitter(user)
+            parser.initAction(parser.getLastTweetAction)
             
-            tweet_url = tweet.tweet_info["tweet_url"]
-            tweet_text = tweet.tweet_info["text"]
+            tweet_url = parser.tweet_info["tweet_url"]
+            tweet_text = parser.tweet_info["text"]
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
-            if tweet_url and not self.tweets.get(tweet_url):
+            if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                print("\n" + tweet_url)
-                print(tweet_text + "\n")
-                if len(self.tweets) > len(self.users):
-                    self.fwd_tweet(user, tweet_url, tweet_text)
+                gpt_reply = self.ask_gpt(tweet_text) + "\n\n" + tweet_url
+                print(gpt_reply + "\n")
+                # if len(self.tweets) > len(self.users):
+                self.fwd_tweet(user, gpt_reply)
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Provide additional context for the following tweet. Don't just restate or summarize the content in the tweet. Explain any unfamiliar terms or acronyms. Aim to use less than 100 words in your reply.\n\n"
+        prompt = "Summarize the content in the tweet in a few 2 to 4 bullets. Be succinct and aim to use less than 100 words.\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
@@ -45,14 +45,10 @@ class TwitterToDiscord:
             print("ChatGPT API endpoint failure\n")
             return 'Nothing to add'
 
-        reply = chat.choices[0].message.content
-        reply = f"**ChatGPT additional context:**\n```{reply}```\n"
-        return reply 
+        return chat.choices[0].message.content
                    
 
-    def fwd_tweet(self, user, tweet_url, tweet_text):
+    def fwd_tweet(self, user, content):
         date = datetime.now()
-        print(f"FORWARDING TWEET -- USER: {user}, DATE: {date}")
-        DiscordWebhook(url=self.webhook_url, content=tweet_url).execute()
-        if tweet_text:
-            DiscordWebhook(url=self.webhook_url, content=self.ask_gpt(tweet_text)).execute()
+        print(f"FORWARDING TWEET -- USER: {user}, DATE: {date}\n")
+        DiscordWebhook(url=self.webhook_url, content=content).execute()
