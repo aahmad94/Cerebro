@@ -25,14 +25,15 @@ class TwitterToDiscord:
             
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
+            tweet_date = parser.tweet_info["date"]
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                gpt_reply = self.ask_gpt(tweet_text) + "\n\n" + tweet_url
+                gpt_reply = tweet_url + "\n\n" + self.ask_gpt(tweet_text)
                 print(gpt_reply + "\n")
-                # if len(self.tweets) > len(self.users):
-                self.fwd_tweet(user, gpt_reply)
+                if len(self.tweets) > len(self.users):
+                    self.fwd_tweet(user, gpt_reply)
 
 
     def ask_gpt(self, tweet_text):
@@ -51,4 +52,4 @@ class TwitterToDiscord:
     def fwd_tweet(self, user, content):
         date = datetime.now()
         print(f"FORWARDING TWEET -- USER: {user}, DATE: {date}\n")
-        DiscordWebhook(url=self.webhook_url, content=content).execute()
+        DiscordWebhook(url=self.webhook_url, content=f"```{content}```").execute()
