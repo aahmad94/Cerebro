@@ -30,14 +30,15 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                gpt_reply = tweet_url + "\n\n" + self.ask_gpt(tweet_text)
+                gpt_reply = f"@{user}" + "\n\n" + self.ask_gpt(tweet_text)
                 print(gpt_reply + "\n")
                 if len(self.tweets) > len(self.users):
                     self.fwd_tweet(user, gpt_reply)
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Summarize the content in the tweet in a few 1 to 2 bullets. Be succinct and aim to use less than 100 words.\n\n"
+        prompt = "Pretend you are a Bloomberg machine that provides short news snippets. + \
+                Summarize the content in the following tweet in a few bullets: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
