@@ -42,7 +42,8 @@ class TwitterToDiscord:
 
     def ask_gpt(self, tweet_text):
         prompt = "Pretend you are a Bloomberg machine that provides short news snippets. + \
-                Summarize the content in the following tweet in a few bullets: \n\n"
+                 Provide additional content for this tweet if appropriate such as people mentioned + \
+                 or acronyms used. Don't summarize or rephrase the content. Use bullet points in your reply: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
