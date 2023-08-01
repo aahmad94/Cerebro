@@ -1,5 +1,6 @@
 import os
 import openai
+import time 
 
 from parse_twitter import ParseTwitter
 from datetime import datetime, timedelta
@@ -33,7 +34,10 @@ class TwitterToDiscord:
                 gpt_reply = f"@{user}" + "\n\n" + self.ask_gpt(tweet_text)
                 print(gpt_reply + "\n")
                 if len(self.tweets) > len(self.users):
-                    self.fwd_tweet(user, gpt_reply)
+                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
+                    self.fwd_tweet(tweet_url)
+                    time.sleep(2)
+                    self.fwd_tweet(gpt_reply)
 
 
     def ask_gpt(self, tweet_text):
@@ -50,7 +54,5 @@ class TwitterToDiscord:
         return chat.choices[0].message.content
                    
 
-    def fwd_tweet(self, user, content):
-        date = datetime.now()
-        print(f"FORWARDING TWEET -- USER: {user}, DATE: {date}\n")
+    def fwd_tweet(self, content):
         DiscordWebhook(url=self.webhook_url, content=f"```{content}```").execute()
