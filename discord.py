@@ -37,7 +37,7 @@ class TwitterToDiscord:
                     print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
                     self.fwd_tweet(tweet_url)
                     time.sleep(2)
-                    self.fwd_tweet(gpt_reply)
+                    self.fwd_tweet(f"```{gpt_reply}```")
 
 
     def ask_gpt(self, tweet_text):
@@ -56,4 +56,4 @@ class TwitterToDiscord:
                    
 
     def fwd_tweet(self, content):
-        DiscordWebhook(url=self.webhook_url, content=f"```{content}```").execute()
+        DiscordWebhook(url=self.webhook_url, content=content).execute()
