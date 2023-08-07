@@ -70,7 +70,7 @@ class ParseTwitter:
     
     def driver(self, url):
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -122,9 +122,9 @@ class ParseTwitter:
 
             for i in range(len(tweets)):
                 tweet = tweets[i]
-                
+                 
                 y_offset += tweet.size["height"]
-                if "Pinned Tweet" not in tweet.text and "Promoted Tweet" not in tweet.text:
+                if "Pinned" not in tweet.text and "Promoted" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
 
@@ -151,6 +151,7 @@ class ParseTwitter:
                     self.active_driver.quit()
                 except: 
                     print(f"Could not click into link itself for user {self.user}")
+                    
         except NoSuchElementException:
             print(f"Element not found for user: {self.user}")
             return self.tweet_info
@@ -178,7 +179,6 @@ class ParseTwitter:
             self.getCreds()
             self.login()
             self.goToUser()
-        
         try: 
             self.awaitElement(self.tweet_selector)
         finally:

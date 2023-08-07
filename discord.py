@@ -33,9 +33,9 @@ class TwitterToDiscord:
                 self.tweets[tweet_url] = True
                 gpt_reply = f"@{user}" + "\n\n" + self.ask_gpt(tweet_text)
                 print(gpt_reply + "\n")
-                if len(self.tweets) > len(self.users):
-                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
-                    self.fwd_tweet(tweet_url)
+                if len(self.tweets) >= 0:
+                    print(f"FORWARDING CONTENT TO {self.webhook_url} -- USER: {user}, DATE: {datetime.now()}\n")
+                    self.fwd_tweet(f"```{tweet_url}```")
                     time.sleep(2)
                     self.fwd_tweet(f"```{gpt_reply}```")
 
