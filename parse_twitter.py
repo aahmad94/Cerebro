@@ -60,7 +60,8 @@ class ParseTwitter:
             input.send_keys(self.login_user)
             input.send_keys(Keys.ENTER)
             
-            self.wait()
+            self.awaitElement("input")
+            self.wait(3)
             input = self.active_driver.find_elements(By.CSS_SELECTOR, "input")[1]
             input.send_keys(self.pwd)
             input.send_keys(Keys.ENTER)
