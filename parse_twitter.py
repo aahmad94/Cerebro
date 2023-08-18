@@ -1,5 +1,6 @@
 import re
 import urllib3
+import time
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -55,16 +56,19 @@ class ParseTwitter:
     #TODO: save login token & re-use till expiry rather than login again (slow)
     def login(self):
         try:
-            self.wait()
+            self.awaitElement('input')
             input = self.active_driver.find_element(By.CSS_SELECTOR, 'input')
             input.send_keys(self.login_user)
             input.send_keys(Keys.ENTER)
             
-            self.awaitElement("input")
-            self.wait(3)
-            input = self.active_driver.find_elements(By.CSS_SELECTOR, "input")[1]
-            input.send_keys(self.pwd)
-            input.send_keys(Keys.ENTER)
+            self.wait()
+            
+            input = self.active_driver.find_elements(By.CSS_SELECTOR, "input")
+            if input and input[1]:
+                input[1].send_keys(self.pwd)
+                input[1].send_keys(Keys.ENTER)
+            else:
+                raise Exception('Password field input element could not be found.')
         except NoSuchElementException as e:
             print(f"User login input element not found for user: {self.user}. Handling the error...")
     
@@ -79,6 +83,7 @@ class ParseTwitter:
         driver = webdriver.Chrome(options=options)
         
         driver.get(url)
+        time.sleep(2)
         return driver
 
 

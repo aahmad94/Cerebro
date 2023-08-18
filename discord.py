@@ -31,19 +31,17 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                gpt_reply = f"@{user}" + "\n\n" + self.ask_gpt(tweet_text)
-                print(gpt_reply + "\n")
                 if len(self.tweets) >= len(self.users):
                     print(f"FORWARDING CONTENT TO {self.webhook_url} -- USER: {user}, DATE: {datetime.now()}\n")
-                    self.fwd_tweet(f"```{tweet_url}```")
-                    time.sleep(2)
-                    self.fwd_tweet(f"```{gpt_reply}```")
+                    self.fwd_tweet(tweet_url)
+                    self.fwd_tweet(self.ask_gpt(tweet_text))
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Pretend you are a Bloomberg terminal and need to provide short news snippets from a tweet. + \
-                 Provide additional content for this tweet if appropriate (people mentioned + \
-                 or acronyms used). Don't summarize or rephrase the content. Use bullet points in your reply: \n\n"
+        prompt = "Only provide additional content, such aspeople mentioned or or acronyms used, \
+                 for the following tweet if appropriate. Don't summarize or rephrase the content. \
+                 Use bullet points in your reply and if you have nothing to add simply state \
+                 'Nothing to add for this Tweet.' as a bullet\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
@@ -56,4 +54,5 @@ class TwitterToDiscord:
                    
 
     def fwd_tweet(self, content):
+        print(content)
         DiscordWebhook(url=self.webhook_url, content=content).execute()
