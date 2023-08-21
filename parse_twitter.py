@@ -69,7 +69,7 @@ class ParseTwitter:
                 input[1].send_keys(Keys.ENTER)
             else:
                 raise Exception('Password field input element could not be found.')
-        except NoSuchElementException as e:
+        except:
             print(f"User login input element not found for user: {self.user}. Handling the error...")
     
     

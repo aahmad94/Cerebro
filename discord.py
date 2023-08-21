@@ -27,6 +27,7 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
             tweet_date = parser.tweet_info["date"]
+            print(tweet_text)
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
