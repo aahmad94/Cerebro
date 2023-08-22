@@ -19,7 +19,11 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 
 # ToDo: create API endpoint to modify users list
 # ToDo: change 'users' terminology (maybe Tweeters)
-cerebro_users = ["firstsquawk", "garyblack00", "lizannsonders", "SawyerMerritt", "chamath"]
+cerebro_users = ["firstsquawk", "garyblack00",
+                 "lizannsonders", "SawyerMerritt", 
+                 "unusual_whales", "KobeissiLetter", 
+                 "friedberg", "chamath", "FredaDuan", 
+                 "InvestiAnalyst"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 

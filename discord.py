@@ -27,22 +27,24 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
             tweet_date = parser.tweet_info["date"]
-            print(tweet_text)
+            print(tweet_text + "\n\n")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                if len(self.tweets) >= len(self.users):
-                    print(f"FORWARDING CONTENT TO {self.webhook_url} -- USER: {user}, DATE: {datetime.now()}\n")
+                if len(self.tweets) >= 0:
+                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
                     self.fwd_tweet(tweet_url)
-                    self.fwd_tweet(self.ask_gpt(tweet_text))
+                    if "None" not in tweet_text:
+                        self.fwd_tweet(self.ask_gpt(tweet_text))
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Only provide additional content, such aspeople mentioned or or acronyms used, \
-                 for the following tweet if appropriate. Don't summarize or rephrase the content. \
+        prompt = "For the following tweet, provide additional content. \
+                 For example, elaborate on people mentioned or or acronyms used in the tweet. \
+                 Don't just summarize or rephrase the content. \
                  Use bullet points in your reply and if you have nothing to add simply state \
-                 'Nothing to add for this Tweet.' as a bullet\n\n"
+                 'None'\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
