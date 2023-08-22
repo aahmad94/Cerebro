@@ -32,7 +32,7 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                if len(self.tweets) >= 0:
+                if len(self.tweets) >= len(self.users):
                     print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
                     self.fwd_tweet(tweet_url)
                     if "None" not in tweet_text:
@@ -40,9 +40,9 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "For the following tweet, provide additional content. \
-                 For example, elaborate on people mentioned or or acronyms used in the tweet. \
-                 Don't just summarize or rephrase the content. \
+        prompt = "For the following tweet, provide additional context -- \
+                 for example, elaborate on people mentioned or or acronyms used in the tweet. \
+                 Don't just summarize or rephrase the content. Be as concise as possible. \
                  Use bullet points in your reply and if you have nothing to add simply state \
                  'None'\n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
