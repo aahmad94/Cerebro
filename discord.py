@@ -39,9 +39,8 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "For the following tweet, provide additional context -- \
-                 for example, elaborate on people mentioned or or acronyms used in the tweet. \
-                 Don't just summarize or rephrase the content. Be as concise as possible. \
+        prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
+                 Don't summarize or rephrase the content. Be as concise as possible. \
                  Use bullet points in your reply. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
