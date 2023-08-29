@@ -41,14 +41,14 @@ class TwitterToDiscord:
     def ask_gpt(self, tweet_text):
         prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
                  Don't summarize or rephrase the content. Be as concise as possible. \
-                 Use bullet points in your reply. \n\n"
+                 Use bullet points in your reply: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
         except: 
             print("ChatGPT API endpoint failure\n")
-            return 'Nothing to add'
+            return ''
 
         return chat.choices[0].message.content
                    
