@@ -32,20 +32,20 @@ fridaysailer_dict = {}
 football_dict = {}
 
 # call Screenshot class to take screenshot of webpage
-screenshot = Screenshot("https://www.marketwatch.com/economy-politics/calendar?mod=side_nav")
+# screenshot = Screenshot("https://www.marketwatch.com/economy-politics/calendar?mod=side_nav")
 
-# while True:
-#     ny = timezone('America/New_York')
-#     now = datetime.now(ny)
+while True:
+    ny = timezone('America/New_York')
+    now = datetime.now(ny)
 
-#     if now.weekday() < 5 and now.hour > 8 and now.hour < 16:
-#         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-#         if now.weekday() == 4 and now.hour > 8 and now.hour < 16:
-#             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
-#         time.sleep(2.5*60)
-#     else:
-#         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-#         time.sleep(20*60)        
+    if now.weekday() < 5 and now.hour > 8 and now.hour < 16:
+        TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
+        if now.weekday() == 4 and now.hour > 8 and now.hour < 16:
+            TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
+        time.sleep(2.5*60)
+    else:
+        TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
+        time.sleep(20*60)        
         
 
         
