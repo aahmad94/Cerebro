@@ -36,7 +36,7 @@ class ParseTwitter:
         self.action = ActionChains(self.active_driver)
 
     # used to let page elemenrs load before using CSS query selectors to find page elements
-    def wait(self, seconds=2):
+    def wait(self, seconds=3):
         self.action.pause(seconds)
         self.action.perform()
 
@@ -87,6 +87,7 @@ class ParseTwitter:
                 for cookie in cookies:
                     self.active_driver.add_cookie(cookie)
             self.active_driver.get(self.x_url)
+            self.wait()
         except:
             print("No cookies found. Logging in...")
         finally:
