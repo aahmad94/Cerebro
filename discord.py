@@ -27,13 +27,14 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
             tweet_date = parser.tweet_info["date"]
+            print(datetime.now())
             print(tweet_text + "\n\n")
 
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) >= len(self.users):
-                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n\n")
+                    print(f"FORWARDING CONTENT -- USER: {user}\n")
                     self.fwd_tweet(tweet_url)
                     self.fwd_tweet(self.ask_gpt(tweet_text))
 
@@ -54,5 +55,4 @@ class TwitterToDiscord:
                    
 
     def fwd_tweet(self, content):
-        print(content)
         DiscordWebhook(url=self.webhook_url, content=content).execute()
