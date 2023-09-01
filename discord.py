@@ -33,7 +33,7 @@ class TwitterToDiscord:
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) >= len(self.users):
-                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n")
+                    print(f"FORWARDING CONTENT -- USER: {user}, DATE: {datetime.now()}\n\n")
                     self.fwd_tweet(tweet_url)
                     self.fwd_tweet(self.ask_gpt(tweet_text))
 

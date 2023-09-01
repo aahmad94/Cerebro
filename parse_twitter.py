@@ -1,6 +1,7 @@
+import pickle
 import re
-import urllib3
 import time
+import urllib3
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -18,8 +19,7 @@ class ParseTwitter:
 
     # tweet related info
     user = None
-    login_url = "https://twitter.com/i/flow/login"
-    base_url = "https://twitter.com/"
+    x_url = "https://x.com/login"
     tweet_info = {
         "tweet_url": None,
         "tweet": None,
@@ -32,11 +32,11 @@ class ParseTwitter:
 
     def __init__(self, user="FridaySailer"):
         self.user = user
-        self.active_driver = self.driver(self.login_url)
+        self.active_driver = self.driver(self.x_url)
         self.action = ActionChains(self.active_driver)
 
     # used to let page elemenrs load before using CSS query selectors to find page elements
-    def wait(self, seconds=3):
+    def wait(self, seconds=2):
         self.action.pause(seconds)
         self.action.perform()
 
@@ -59,20 +59,40 @@ class ParseTwitter:
             self.awaitElement('input')
             input = self.active_driver.find_element(By.CSS_SELECTOR, 'input')
             input.send_keys(self.login_user)
-            input.send_keys(Keys.ENTER)
-            
+            input.send_keys(Keys.ENTER) 
             self.wait()
             
             input = self.active_driver.find_elements(By.CSS_SELECTOR, "input")
             if input and input[1]:
                 input[1].send_keys(self.pwd)
                 input[1].send_keys(Keys.ENTER)
+                self.wait()
+                self.getSessionCookies()
             else:
                 raise Exception('Password field input element could not be found.')
         except:
             print(f"User login input element not found for user: {self.user}. Handling the error...")
     
+
+    def getSessionCookies(self):
+        cookies = self.active_driver.get_cookies()
+        with open('cookies.pkl', 'wb') as file:
+            pickle.dump(cookies, file)
     
+
+    def loadSessionCookies(self):
+        try:
+            with open('cookies.pkl', 'rb') as file:
+                cookies = pickle.load(file)
+                for cookie in cookies:
+                    self.active_driver.add_cookie(cookie)
+            self.active_driver.get(self.x_url)
+        except:
+            print("No cookies found. Logging in...")
+        finally:
+            if "login" in self.active_driver.current_url:
+                self.login()
+
     def driver(self, url):
         options = Options()
         options.add_argument('--headless')
@@ -102,16 +122,16 @@ class ParseTwitter:
     # after logging in, from Twitter feed, use search bar to find user
     def goToUser(self):
         try:
-            self.wait(5)
+            self.wait()
             search_selector = "input[data-testid='SearchBox_Search_Input']"
-            input = self.active_driver.find_element(By.CSS_SELECTOR, search_selector)
             self.awaitElement(search_selector)
+            input = self.active_driver.find_element(By.CSS_SELECTOR, search_selector)
             input.send_keys(self.user)
 
-            self.wait()
+            self.wait(0.50)
             input.send_keys(Keys.ARROW_DOWN)
 
-            self.wait()
+            self.wait(0.50)
             input.send_keys(Keys.ARROW_DOWN)
             input.send_keys(Keys.ENTER)
         except NoSuchElementException as e:
@@ -170,7 +190,7 @@ class ParseTwitter:
 
     def formatUrl(self, url):
         # Regex pattern to match the main URL including the tweet ID
-        pattern = r"(https?://twitter.com/.+/status/\d+)"
+        pattern = r"(https?://x.com/.+/status/\d+)"
 
         # Extract the main URL with tweet ID
         match = re.search(pattern, url)
@@ -183,7 +203,7 @@ class ParseTwitter:
             self.awaitElement("div[aria-labelledby='modal-header']")
         finally:
             self.getCreds()
-            self.login()
+            self.loadSessionCookies()
             self.goToUser()
         try: 
             self.awaitElement(self.tweet_selector)
