@@ -22,7 +22,7 @@ class ParseTwitter:
     x_url = "https://x.com/login"
     tweet_info = {
         "tweet_url": None,
-        "tweet": None,
+        "text": None,
         "date": None,
     }
     tweet_selector = "[data-testid='tweet']"
@@ -172,8 +172,7 @@ class ParseTwitter:
                     self.wait(2)
                     self.tweet_info["text"] = self.active_driver.find_element(
                         By.CSS_SELECTOR, "[data-testid='tweetText']").text
-                    self.tweet_info["tweet_url"] = self.formatUrl(
-                        self.active_driver.execute_script("return window.location.href;"))
+                    self.tweet_info["tweet_url"] = self.active_driver.execute_script("return window.location.href;")
                     
                     self.active_driver.quit()
                 except: 
@@ -205,7 +204,8 @@ class ParseTwitter:
         finally:
             self.getCreds()
             self.loadSessionCookies()
-            self.goToUser()
+            self.active_driver.get(f"https://x.com/{self.user}")
+            self.wait()
         try: 
             self.awaitElement(self.tweet_selector)
         finally:
