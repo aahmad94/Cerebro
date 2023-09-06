@@ -1,9 +1,8 @@
 import os
 import openai
-import time 
 
 from parse_twitter import ParseTwitter
-from datetime import datetime, timedelta
+from datetime import datetime
 from discord_webhook import DiscordWebhook
 from dotenv import load_dotenv
 
@@ -35,13 +34,14 @@ class TwitterToDiscord:
                     print(datetime.now())
                     print(f"FORWARDING CONTENT -- USER: {user}")
                     self.fwd_tweet(tweet_url)
-                    self.fwd_tweet(self.ask_gpt(tweet_text))
+                    self.fwd_tweet(self.ask_gpt(tweet_text.lower()))
 
 
     def ask_gpt(self, tweet_text):
         prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
-                 Don't summarize or rephrase the content. Be as concise as possible. \
-                 Use bullet points in your reply: \n\n"
+                 Don't summarize or rephrase the content in the tweet. Be as concise as possible. \
+                 If any measurements or scores are mentioned, provide context around what is \
+                 usually considered a good or bad measure. Use bullet points in your reply: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
