@@ -33,22 +33,29 @@ fridaysailer_dict = {}
 football_dict = {}
 
 # call Screenshot class to take screenshot of webpage
-screenshot_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
-Screenshot(screenshot_url).snap()
+econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
+Screenshot(econ_cal_url).snap()
 
-# while True:
-#     ny = timezone('America/New_York')
-#     now = datetime.now(ny)
+fwd_econ_cal = True
+while True:
+    ny = timezone('America/New_York')
+    now = datetime.now(ny)
 
-#     if now.weekday() < 5 and now.hour > 8 and now.hour < 17:
-#         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-#         time.sleep(2.5*60)
-#         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
-#             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
-#         time.sleep(2.5*60)
-#     else:
-#         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-#         time.sleep(20*60)        
+
+    if now.weekday() < 5 and now.hour > 8 and now.hour < 17:
+        if now.weekday() == 1 and fwd_econ_cal:
+            fwd_econ_cal = False
+            # TODO: use discord webhook to send screenshot of econ calendar
+
+        TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
+        time.sleep(2.5*60)
+        if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
+            fwd_econ_cal = True
+            TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
+        time.sleep(2.5*60)
+    else:
+        TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
+        time.sleep(20*60)        
         
 
         
