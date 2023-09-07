@@ -23,7 +23,8 @@ cerebro_users = ["firstsquawk", "garyblack00",
                  "lizannsonders", "SawyerMerritt", 
                  "unusual_whales", "KobeissiLetter", 
                  "friedberg", "chamath", "FredaDuan", 
-                 "InvestiAnalyst"]
+                 "InvestiAnalyst", "MarketRebels", 
+                 "StockMKTNewz"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
