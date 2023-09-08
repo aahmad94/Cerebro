@@ -1,5 +1,6 @@
 import time
 
+from discord_webhook import DiscordWebhook, DiscordEmbed
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
@@ -11,30 +12,34 @@ class Screenshot:
     active_driver = None
 
     # initialize webdriver
-    def __init__(self, url):
-        self.active_driver = self.driver(url)
+    def __init__(self, screenshot_url, webhook_url):
+        self.webhook_url = webhook_url
+        self.active_driver = self.driver(screenshot_url)
     
     def snap(self):
         self.awaitModal()
         # find element on page by CSS selector
         try:
             table = self.active_driver.find_element(By.CSS_SELECTOR, '.element--textblock')
-            self.active_driver.execute_script("document.body.style.zoom='60%';")
+            self.active_driver.execute_script("document.body.style.zoom='67%';")
             time.sleep(2)
             self.active_driver.execute_script(
                 "arguments[0].scrollIntoView(true);", table)
 
             # take screenshot of the page
             self.active_driver.save_screenshot('assets/screenshot.png')
+            time.sleep(2)
+            self.fwd_image()
         except NoSuchElementException as e:
             print(f"Unable to locate element with CSS selector 'table'")
             print(e)
+        
 
 
     def driver(self, url):
         # Configure webdriver to be headless
         options = Options()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=720,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -66,7 +71,9 @@ class Screenshot:
             print(e)
 
 
-    def scrollToView(self):
-        # scroll down 400 pixels
-        self.active_driver.execute_script("window.scrollTo(0, 800);")
-        self.active_driver.implicitly_wait(2)
+    def fwd_image(self):
+        webhook = DiscordWebhook(
+            url=self.webhook_url)
+        with open("assets/screenshot.png", "rb") as f:
+            webhook.add_file(file=f.read(), filename="economic_calendar.png")
+        webhook.execute()
