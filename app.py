@@ -43,8 +43,9 @@ while True:
 
     if now.weekday() < 5 and now.hour > 7 and now.hour < 17:
         # use discord webhook to send screenshot of econ calendar
-        fwd_econ_cal = False
-        Screenshot(econ_cal_url, cerebro_webhook_url).snap()
+        if fwd_econ_cal:
+            Screenshot(econ_cal_url, cerebro_webhook_url).snap()
+            fwd_econ_cal = False
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(2.5*60)
 
@@ -52,13 +53,6 @@ while True:
             fwd_econ_cal = True
             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
             time.sleep(2.5*60)
-            
     else:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(20*60)        
-        
-
-        
-
-
-
