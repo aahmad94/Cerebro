@@ -54,5 +54,6 @@ while True:
             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
             time.sleep(2.5*60)
     else:
+        fwd_econ_cal = True
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(20*60)        
