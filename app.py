@@ -50,7 +50,6 @@ while True:
         time.sleep(2.5*60)
 
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
-            fwd_econ_cal = True
             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
             time.sleep(2.5*60)
     else:
