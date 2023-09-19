@@ -56,7 +56,7 @@ while True:
         time.sleep(2.5*60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if now.hour >= 8 and now.hour <= 11 and new_hr:
+        if now.hour >= 7 and now.hour <= 11 and new_hr:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
             
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
