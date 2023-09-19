@@ -202,12 +202,21 @@ class ParseTwitter:
     def initAction(self, action):
         try:
             self.awaitElement("div[aria-labelledby='modal-header']")
-        finally:
+        except NoSuchElementException as e:
+            print(f"User {self.user} could not be found in search bar")
+            print(e)
+        try:
             self.getCreds()
             self.loadSessionCookies()
             self.active_driver.get(f"https://x.com/{self.user}")
             self.wait()
+        except e:
+            print(f"Unable to load user page for user: {self.user}")
+            print(e)
+
         try: 
             self.awaitElement(self.tweet_selector)
+        except:
+            print(f"Unable to locate tweet element for user: {self.user}")
         finally:
             action()
