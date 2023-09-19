@@ -1,5 +1,6 @@
 import os
 import openai
+import time
 
 from parse_twitter import ParseTwitter
 from datetime import datetime
@@ -26,13 +27,15 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
 
+            content = f"```\n{user.upper()}\n{time.strftime('%m/%d/%Y, %H:%M')}\n{tweet_url}\n\n {tweet_text}\n```"
+
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 if len(self.tweets) >= len(self.users):
                     print(datetime.now())
                     print(f"FORWARDING CONTENT -- USER: {user}")
-                    self.fwd_tweet(tweet_url)
+                    self.fwd_tweet(content)
                     self.fwd_tweet(self.ask_gpt(tweet_text.lower()))
 
 
@@ -40,7 +43,7 @@ class TwitterToDiscord:
         prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
                  If any measurements or scores are mentioned, provide context around what is \
                  usually considered a good or bad measure. Use bullet points in your reply. \
-                 Try to use 3 bullets at most and less than 200 characters. \
+                 Try to use 3 bullets and less than 325 characters. \
                  Don't summarize or rephrase the content in the tweet. Be as concise as possible. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
