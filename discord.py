@@ -38,9 +38,10 @@ class TwitterToDiscord:
 
     def ask_gpt(self, tweet_text):
         prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
-                 Don't summarize or rephrase the content in the tweet. Be as concise as possible. \
                  If any measurements or scores are mentioned, provide context around what is \
-                 usually considered a good or bad measure. Use bullet points in your reply: \n\n"
+                 usually considered a good or bad measure. Use bullet points in your reply. \
+                 Try to use 3 bullets at most and less than 200 characters. \
+                 Don't summarize or rephrase the content in the tweet. Be as concise as possible. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:

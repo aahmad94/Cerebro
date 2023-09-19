@@ -34,7 +34,6 @@ class Screenshot:
         except NoSuchElementException as e:
             print(f"Unable to locate element with CSS selector 'table'")
             print(e)
-        
 
 
     def driver(self, url):
@@ -67,15 +66,13 @@ class Screenshot:
             self.element_close_btn.click()
             time.sleep(2)
         except TimeoutException as e:
-            print(
-                f"Unable to locate element with CSS selector '.close-btn'")
+            print("Unable to locate element with CSS selector '.close-btn'")
             print(e)
 
 
     def fwd_image(self):
-        webhook = DiscordWebhook(
-            url=self.webhook_url)
+        webhook = DiscordWebhook(url=self.webhook_url)
         with open("assets/screenshot.png", "rb") as f:
             webhook.add_file(file=f.read(), filename="economic_calendar.png")
-            webhook.content = self.img_tag + time.strftime("%m/%d/%Y, %H:%M:%S")
+        webhook.content = self.img_tag + time.strftime("%m/%d/%Y, %H:%M:%S")
         webhook.execute()

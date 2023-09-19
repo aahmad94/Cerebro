@@ -19,12 +19,10 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 
 # ToDo: create API endpoint to modify users list
 # ToDo: change 'users' terminology (maybe Tweeters)
-cerebro_users = ["firstsquawk", "garyblack00",
+cerebro_users = ["garyblack00", "FredaDuan",
                  "lizannsonders", "SawyerMerritt", 
-                 "unusual_whales", "KobeissiLetter", 
-                 "friedberg", "chamath", "FredaDuan", 
-                 "InvestiAnalyst", "MarketRebels", 
-                 "StockMKTNewz"]
+                 "KobeissiLetter", "friedberg", 
+                 "chamath"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
@@ -58,7 +56,8 @@ while True:
         # economic data is usually posted between 8:30am and 10:30am
         if now.hour >= 7 and now.hour <= 11 and new_hr:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
-            
+
+        # friday post for fridaysailer webhook
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
             time.sleep(2.5*60)
