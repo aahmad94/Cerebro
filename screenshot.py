@@ -12,7 +12,8 @@ class Screenshot:
     active_driver = None
 
     # initialize webdriver
-    def __init__(self, screenshot_url, webhook_url):
+    def __init__(self, screenshot_url, webhook_url, img_tag):
+        self.img_tag = img_tag
         self.webhook_url = webhook_url
         self.active_driver = self.driver(screenshot_url)
     
@@ -76,4 +77,5 @@ class Screenshot:
             url=self.webhook_url)
         with open("assets/screenshot.png", "rb") as f:
             webhook.add_file(file=f.read(), filename="economic_calendar.png")
+            webhook.content = self.img_tag + time.strftime("%m/%d/%Y, %H:%M:%S")
         webhook.execute()

@@ -35,24 +35,33 @@ football_dict = {}
 # call Screenshot class to take screenshot of webpage
 econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
 
-fwd_econ_cal = True
+# configure app timezone
+ny = timezone('America/New_York')
+now = datetime.now(ny)
+last_hr = now.hour
+new_hr = False
+
 while True:
-    ny = timezone('America/New_York')
-    now = datetime.now(ny)
+    # check if a new hour has passed
+    if now.hour != last_hr:
+        new_hr = True
+        last_hr = now.hour
+    else:
+        new_hr = False
 
-
-    if now.weekday() < 5 and now.hour > 7 and now.hour < 17:
+    # fwd every 2.5 minutes between 7am and 5pm EST every weekday
+    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
-        if fwd_econ_cal:
-            Screenshot(econ_cal_url, cerebro_webhook_url).snap()
-            fwd_econ_cal = False
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(2.5*60)
 
+        # economic data is usually posted between 8:30am and 10:30am
+        if now.hour >= 8 and now.hour <= 11 and new_hr:
+            Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
+            
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
             TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
             time.sleep(2.5*60)
     else:
-        fwd_econ_cal = True
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(20*60)        
