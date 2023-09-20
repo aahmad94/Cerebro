@@ -43,8 +43,8 @@ class TwitterToDiscord:
         prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
                  If any measurements or scores are mentioned, provide context around what is \
                  usually considered a good or bad measure. Use bullet points in your reply. \
-                 Try to use 3 bullets and less than 325 characters. \
-                 Don't summarize or rephrase the content in the tweet. Be as concise as possible. \n\n"
+                 Use less than 325 characters in your reply -- be as concise as possible. \
+                 Less is more. Do not rephrase the content in the tweet.  \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
