@@ -210,13 +210,13 @@ class ParseTwitter:
             self.loadSessionCookies()
             self.active_driver.get(f"https://x.com/{self.user}")
             self.wait()
-        except e:
+        except:
             print(f"Unable to load user page for user: {self.user}")
-            print(e)
 
         try: 
             self.awaitElement(self.tweet_selector)
         except:
+            print(f"Unable to locate tweet element for user: {self.user}")
             print(f"Unable to locate tweet element for user: {self.user}")
         finally:
             action()
