@@ -37,7 +37,15 @@ econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_n
 ny = timezone('America/New_York')
 now = datetime.now(ny)
 last_hr = now.hour
-new_hr = False
+
+def is_new_hr(last, now):
+    new_hr = False
+    if last != now:
+        new_hr = True
+        last = now
+    else:
+        new_hr = False
+    return new_hr
 
 while True:
     # check if a new hour has passed
@@ -51,10 +59,10 @@ while True:
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-        time.sleep(2.5*60)
+        time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if now.hour >= 7 and now.hour <= 11 and new_hr:
+        if is_new_hr(last_hr, now.hour) and now.hour <= 11:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
 
         # friday post for fridaysailer webhook
@@ -63,4 +71,4 @@ while True:
             time.sleep(2.5*60)
     else:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-        time.sleep(20*60)        
+        time.sleep(10*60)        
