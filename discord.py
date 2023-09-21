@@ -19,6 +19,7 @@ class TwitterToDiscord:
         self.users = users
         self.get_user_tweets()
 
+
     def get_user_tweets(self):
         for user in self.users:
             parser = ParseTwitter(user)
@@ -27,28 +28,30 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
 
-            content = f"```\n{user.upper()}\n{time.strftime('%m/%d/%Y, %H:%M')}\n{tweet_url}\n\n {tweet_text}\n```"
-
+            content = f"||```\n{tweet_url}\n\n {self.shorten_post(tweet_text)}\n```||"
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                if len(self.tweets) >= len(self.users):
-                    print(datetime.now())
-                    print(f"FORWARDING CONTENT -- USER: {user}")
+                summary = f"{self.ask_gpt(tweet_text)} - **{user}**"
+                if len(content) > 20 and summary and len(self.tweets) >= 0:
+                    self.fwd_tweet(summary)
                     self.fwd_tweet(content)
-                    self.fwd_tweet(self.ask_gpt(tweet_text.lower()))
+
+
+    def shorten_post(self, text):
+        if len(text) > 500:
+            return f"{text[:500]}..."
+        return text
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Elaborate on people mentioned in the following tweet and expand any acronyms. \
-                 If any measurements or scores are mentioned, provide context around what is \
-                 usually considered a good or bad measure. Use bullet points in your reply. \
-                 Use less than 325 characters in your reply -- be as concise as possible. \
-                 Less is more. Do not rephrase the content in the tweet.  \n\n"
+        prompt = "Explain the following Tweet in as little number of words possible: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
-            chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+            chat = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo", messages=messages)
+            print("ChatGPT API endpoint success")
         except: 
             print("ChatGPT API endpoint failure\n")
             return ''
