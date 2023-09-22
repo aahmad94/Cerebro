@@ -28,7 +28,7 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
 
-            content = f"||```\n{tweet_url}\n\n {self.shorten_post(tweet_text)}\n```||"
+            content = f"||```\n{self.shorten_post(tweet_text)}\n```||"
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
@@ -36,6 +36,7 @@ class TwitterToDiscord:
                 if len(self.tweets) >= len(self.users):
                     self.fwd_tweet(summary)
                     self.fwd_tweet(content)
+                    self.fwd_tweet(f"||{tweet_url}||")
 
 
     def shorten_post(self, text):
