@@ -36,7 +36,7 @@ class TwitterToDiscord:
                 if len(self.tweets) >= len(self.users):
                     self.fwd_tweet(summary)
                     self.fwd_tweet(content)
-                    self.fwd_tweet(f"||{tweet_url}||")
+                    self.fwd_tweet(f"URL - ||{tweet_url}||")
 
 
     def shorten_post(self, text):
