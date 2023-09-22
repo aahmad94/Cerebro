@@ -22,7 +22,7 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 cerebro_users = ["garyblack00", "FredaDuan",
                  "lizannsonders", "SawyerMerritt", 
                  "KobeissiLetter", "friedberg", 
-                 "chamath"]
+                 "fundstrat", "chamath"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
@@ -48,13 +48,6 @@ def is_new_hr(last, now):
     return new_hr
 
 while True:
-    # check if a new hour has passed
-    if now.hour != last_hr:
-        new_hr = True
-        last_hr = now.hour
-    else:
-        new_hr = False
-
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
