@@ -38,20 +38,11 @@ def get_time():
     ny = timezone('America/New_York')
     return datetime.now(ny)
 
-
-now = get_time()
-last_hr = now.hour
-
-def is_new_hr(now=get_time().hour):
-    new_hr = False
-    if last_hr < now:
-        new_hr = True
-        last_hr = get_time
-    else:
-        new_hr = False
-    return new_hr
-
+cal_sent = False
 while True:
+    now = get_time()
+    last_hr = now.hour
+
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
@@ -59,8 +50,11 @@ while True:
         time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if is_new_hr() and now.hour <= 11:
+        if now.hour >= 8 and now.hour <= 12 or now.hour == 23 and now.minute < 2 and not cal_sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
+            cal_sent = True
+        elif now.minute > 5:
+            cal_sent = False
 
         # friday post for fridaysailer webhook
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
