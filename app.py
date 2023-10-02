@@ -34,15 +34,19 @@ football_dict = {}
 econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
 
 # configure app timezone
-ny = timezone('America/New_York')
-now = datetime.now(ny)
+def get_time():
+    ny = timezone('America/New_York')
+    return datetime.now(ny)
+
+
+now = get_time()
 last_hr = now.hour
 
-def is_new_hr(last, now):
+def is_new_hr(now=get_time().hour):
     new_hr = False
-    if last != now:
+    if last_hr < now:
         new_hr = True
-        last = now
+        last_hr = get_time
     else:
         new_hr = False
     return new_hr
@@ -55,7 +59,7 @@ while True:
         time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if is_new_hr(last_hr, now.hour) and now.hour <= 11:
+        if is_new_hr() and now.hour <= 11:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
 
         # friday post for fridaysailer webhook
