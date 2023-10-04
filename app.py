@@ -50,10 +50,10 @@ while True:
         time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if now.hour >= 8 and now.hour <= 12 or now.hour == 23 and now.minute < 2 and not cal_sent:
+        if (now.hour == 8 or now.hour == 12) and not cal_sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
             cal_sent = True
-        elif now.minute > 5:
+        else:
             cal_sent = False
 
         # friday post for fridaysailer webhook
