@@ -53,7 +53,7 @@ while True:
         if (now.hour == 8 or now.hour == 12) and not cal_sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
             cal_sent = True
-        else:
+        elif now.hour == 9 or now.hour == 13:
             cal_sent = False
 
         # friday post for fridaysailer webhook
