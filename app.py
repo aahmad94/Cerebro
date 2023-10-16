@@ -22,7 +22,8 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 cerebro_users = ["garyblack00", "FredaDuan",
                  "lizannsonders", "SawyerMerritt", 
                  "KobeissiLetter", "friedberg", 
-                 "fundstrat", "chamath"]
+                 "fundstrat", "chamath",
+                 "firstsquawk"]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
