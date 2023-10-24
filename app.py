@@ -34,7 +34,7 @@ football_dict = {}
 # arguments to instantiate Screenshot class with to be able to generate and fwd image
 econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
 econ_cal_css = ".element--textblock"
-bloomberg_url = "https://www.bloomberg.com"
+barrons_url = "https://www.barrons.com"
 
 # configure app timezone
 def get_time():
@@ -46,6 +46,7 @@ while True:
     now = get_time()
     last_hr = now.hour
 
+    Screenshot(barrons_url, cerebro_webhook_url, None, "BARRON'S FRONT PAGE\n").snap()
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
@@ -55,7 +56,7 @@ while True:
         # economic data is usually posted between 8:30am and 10:30am
         if (now.hour == 8 or now.hour == 12) and not sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, econ_cal_css, "ECONOMIC CALENDAR\n").snap()
-            # Screenshot(bloomberg_url, cerebro_webhook_url, None, "BLOOMBERG FRONT PAGE\n").snap()
+            Screenshot(barrons_url, cerebro_webhook_url, None, "BARRON'S FRONT PAGE\n").snap()
             sent = True
         elif now.hour == 9 or now.hour == 13:
             sent = False
