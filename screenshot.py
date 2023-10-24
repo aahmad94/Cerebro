@@ -12,10 +12,10 @@ class Screenshot:
     active_driver = None
 
     # initialize webdriver
-    def __init__(self, screenshot_url, webhook_url, img_tag):
+    def __init__(self, screenshot_url, webhook_url, css_selector, img_tag):
         self.img_tag = img_tag
         self.webhook_url = webhook_url
-        self.css_selector = None
+        self.css_selector = css_selector
         self.active_driver = self.driver(screenshot_url)
     
     def snap(self):
