@@ -42,7 +42,6 @@ def get_time():
     return datetime.now(ny)
 
 sent = False
-Screenshot(bloomberg_url, cerebro_webhook_url, "BLOOMBERG FRONT PAGE\n").snap()
 while True:
     now = get_time()
     last_hr = now.hour
@@ -56,7 +55,7 @@ while True:
         # economic data is usually posted between 8:30am and 10:30am
         if (now.hour == 8 or now.hour == 12) and not sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, econ_cal_css, "ECONOMIC CALENDAR\n").snap()
-            Screenshot(bloomberg_url, cerebro_webhook_url, None, "BLOOMBERG FRONT PAGE\n").snap()
+            # Screenshot(bloomberg_url, cerebro_webhook_url, None, "BLOOMBERG FRONT PAGE\n").snap()
             sent = True
         elif now.hour == 9 or now.hour == 13:
             sent = False
