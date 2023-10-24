@@ -34,8 +34,7 @@ football_dict = {}
 # arguments to instantiate Screenshot class with to be able to generate and fwd image
 econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
 econ_cal_css = ".element--textblock"
-barrons_url = "https://www.barrons.com"
-
+barrons_url = "https://www.bloomberg.com"
 # configure app timezone
 def get_time():
     ny = timezone('America/New_York')
