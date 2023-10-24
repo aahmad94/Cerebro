@@ -55,8 +55,8 @@ while True:
 
         # economic data is usually posted between 8:30am and 10:30am
         if (now.hour == 8 or now.hour == 12) and not sent:
-            Screenshot(econ_cal_url, cerebro_webhook_url, econ_cal_css, "ECONOMIC CALENDAR\n").snap()
-            Screenshot(barrons_url, cerebro_webhook_url, False, "BARRON'S FRONT PAGE\n").snap()
+            Screenshot(econ_cal_url, cerebro_webhook_url, econ_cal_css, True,"ECONOMIC CALENDAR\n").snap()
+            Screenshot(barrons_url, cerebro_webhook_url, False, False, "BARRON'S FRONT PAGE\n").snap()
             sent = True
         elif now.hour == 9 or now.hour == 13:
             sent = False
