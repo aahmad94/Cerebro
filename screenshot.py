@@ -24,8 +24,9 @@ class Screenshot:
             table = self.active_driver.find_element(By.CSS_SELECTOR, '.element--textblock')
             self.active_driver.execute_script("document.body.style.zoom='67%';")
             time.sleep(2)
-            self.active_driver.execute_script(
-                "arguments[0].scrollIntoView(true);", table)
+            if table:
+                self.active_driver.execute_script(
+                    "arguments[0].scrollIntoView(true);", table)
 
             # take screenshot of the page
             self.active_driver.save_screenshot('assets/screenshot.png')

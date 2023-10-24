@@ -33,13 +33,14 @@ football_dict = {}
 
 # call Screenshot class to take screenshot of webpage
 econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
-
+bloomberg_url = "https://www.bloomberg.com"
 # configure app timezone
 def get_time():
     ny = timezone('America/New_York')
     return datetime.now(ny)
 
-cal_sent = False
+sent = False
+Screenshot(bloomberg_url, cerebro_webhook_url, "BLOOMBERG FRONT PAGE\n").snap()
 while True:
     now = get_time()
     last_hr = now.hour
@@ -51,11 +52,12 @@ while True:
         time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if (now.hour == 8 or now.hour == 12) and not cal_sent:
+        if (now.hour == 8 or now.hour == 12) and not sent:
             Screenshot(econ_cal_url, cerebro_webhook_url, "ECONOMIC CALENDAR\n").snap()
-            cal_sent = True
+            Screenshot(bloomberg_url, cerebro_webhook_url, "BLOOMBERG FRONT PAGE\n").snap()
+            sent = True
         elif now.hour == 9 or now.hour == 13:
-            cal_sent = False
+            sent = False
 
         # friday post for fridaysailer webhook
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
