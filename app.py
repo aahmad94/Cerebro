@@ -32,9 +32,20 @@ fridaysailer_dict = {}
 football_dict = {}
 
 # arguments to instantiate Screenshot class with to be able to generate and fwd image
-econ_cal_url = "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav"
-econ_cal_css = ".element--textblock"
-barrons_url = "https://www.bloomberg.com"
+market_watch_snap = {
+    "url": "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav",
+    "css": ".element--textblock",
+    "modal": True,
+    "info": "ECONOMIC CALENDAR\n",
+}
+
+barrons_snap = {
+    "url": "https://www.barrons.com/",
+    "css": False,
+    "modal": False,
+    "info": "BARRON'S FRONT PAGE\n",
+}
+
 # configure app timezone
 def get_time():
     ny = timezone('America/New_York')
@@ -45,7 +56,6 @@ while True:
     now = get_time()
     last_hr = now.hour
 
-    Screenshot(barrons_url, cerebro_webhook_url, False, False, "BARRON'S FRONT PAGE\n").snap()
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
@@ -53,9 +63,9 @@ while True:
         time.sleep(60)
 
         # economic data is usually posted between 8:30am and 10:30am
-        if (now.hour == 8 or now.hour == 12) and not sent:
-            Screenshot(econ_cal_url, cerebro_webhook_url, econ_cal_css, True,"ECONOMIC CALENDAR\n").snap()
-            Screenshot(barrons_url, cerebro_webhook_url, False, False, "BARRON'S FRONT PAGE\n").snap()
+        if (now.hour == 8 or now.hour == 17) and not sent:
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()
+            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
             sent = True
         elif now.hour == 9 or now.hour == 13:
             sent = False
