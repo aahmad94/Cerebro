@@ -46,7 +46,7 @@ while True:
     now = get_time()
     last_hr = now.hour
 
-    Screenshot(barrons_url, cerebro_webhook_url, False, "BARRON'S FRONT PAGE\n").snap()
+    Screenshot(barrons_url, cerebro_webhook_url, False, False, "BARRON'S FRONT PAGE\n").snap()
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
