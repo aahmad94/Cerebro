@@ -15,18 +15,19 @@ class Screenshot:
     def __init__(self, screenshot_url, webhook_url, img_tag):
         self.img_tag = img_tag
         self.webhook_url = webhook_url
+        self.css_selector = None
         self.active_driver = self.driver(screenshot_url)
     
     def snap(self):
         self.awaitModal()
         # find element on page by CSS selector
         try:
-            table = self.active_driver.find_element(By.CSS_SELECTOR, '.element--textblock')
             self.active_driver.execute_script("document.body.style.zoom='67%';")
             time.sleep(2)
-            if table:
+            if self.css_selector:
+                css_element = self.active_driver.find_element(By.CSS_SELECTOR, self.css_selector)
                 self.active_driver.execute_script(
-                    "arguments[0].scrollIntoView(true);", table)
+                    "arguments[0].scrollIntoView(true);", css_element)
 
             # take screenshot of the page
             self.active_driver.save_screenshot('assets/screenshot.png')
