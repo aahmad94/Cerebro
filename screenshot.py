@@ -78,5 +78,5 @@ class Screenshot:
         webhook = DiscordWebhook(url=self.webhook_url)
         with open("assets/screenshot.png", "rb") as f:
             webhook.add_file(file=f.read(), filename="economic_calendar.png")
-        webhook.content = self.img_tag + time.strftime("%m/%d/%Y, %H:%M:%S")
+        webhook.content = f"{self.img_tag}\n<{self.url}>"
         webhook.execute()

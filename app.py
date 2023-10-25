@@ -58,12 +58,13 @@ while True:
     if now.hour == 0 and now.minute < 10:
         sent_hr = 0
 
-    if now.hour % 7 > 0 and now.hour > sent_hr % 24:
-        # send between 8 am and 12 pm
-        if now.hour % 8 <= 4:  
-            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()
-        # send between 8 am pm 6 pm
-        elif now.hour <= 18:
+    # enter loop every hour starting at 8 AM
+    if now.hour % 8 <= 4 and now.hour > sent_hr % 24:
+        # send until 12 pm and at end of day at 9 pm
+        if now.hour % 8 <= 4 or now.hour == 21:  
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()    
+        # send until 7 pm
+        if now.hour <= 19:
             Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
         sent_hr = now.hour
 
