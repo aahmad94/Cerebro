@@ -12,9 +12,10 @@ class Screenshot:
     active_driver = None
 
     # initialize webdriver
-    def __init__(self, webhook_url, screenshot_url, css_selector, modal_bool, img_tag):
+    def __init__(self, webhook_url, url, css_selector, modal_bool, img_tag):
         self.webhook_url = webhook_url
-        self.active_driver = self.driver(screenshot_url)
+        self.url = url
+        self.active_driver = self.driver(url)
         self.css_selector = css_selector
         self.modal_bool = modal_bool
         self.img_tag = img_tag
