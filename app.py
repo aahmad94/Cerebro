@@ -51,7 +51,7 @@ def get_time():
     ny = timezone('America/New_York')
     return datetime.now(ny)
 
-sent = False
+sent = 0
 while True:
     now = get_time()
     last_hr = now.hour
@@ -62,13 +62,10 @@ while True:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(60)
 
-        # economic data is usually posted between 8:30am and 10:30am
-        if (now.hour == 8 or now.hour == 17) and not sent:
+        if now.hour == 8 or now.hour > (sent + 1) % 24:
             Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()
             Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
-            sent = True
-        elif now.hour == 9 or now.hour == 13:
-            sent = False
+            sent = now.hour
 
         # friday post for fridaysailer webhook
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
