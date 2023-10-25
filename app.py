@@ -51,21 +51,27 @@ def get_time():
     ny = timezone('America/New_York')
     return datetime.now(ny)
 
-sent = 0
+sent_hr = 0
 while True:
     now = get_time()
-    last_hr = now.hour
+    
+    if now.hour == 0 and now.minute < 10:
+        sent_hr = 0
+
+    if now.hour % 7 > 0 and now.hour > sent_hr % 24:
+        # send between 8 am and 12 pm
+        if now.hour % 8 <= 4:  
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()
+        # send between 8 am pm 6 pm
+        elif now.hour <= 18:
+            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
+        sent_hr = now.hour
 
     # fwd every 2.5 minutes between 7am and 5pm EST every weekday
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17:
         # use discord webhook to send screenshot of econ calendar
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
         time.sleep(60)
-
-        if now.hour == 8 or now.hour > (sent + 1) % 24:
-            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()
-            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
-            sent = now.hour
 
         # friday post for fridaysailer webhook
         if now.weekday() == 4 and now.hour > 8 and now.hour < 14:
