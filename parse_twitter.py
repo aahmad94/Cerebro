@@ -103,9 +103,15 @@ class ParseTwitter:
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')
         driver = webdriver.Chrome(options=options)
-        
-        driver.get(url)
-        time.sleep(2)
+        try:
+            driver.get(url)
+            time.sleep(2)
+            return driver
+        except TimeoutException as e:
+            print(f"Timeout error for user: {self.user}. Unable to load page: {url}")
+            print(e)
+        except:
+            print(f"Error for user: {self.user}. Unable to load page: {url}")
         return driver
 
 
