@@ -73,7 +73,7 @@ def fwd_tweets(now, sent_minute):
     # fwd every weekday betweent 7 am and 5 pm every minute, else fwd every 10 minutes
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute > sent_minute + 1:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-    elif now.weekday > 4 and now.minute % 10 == 0:
+    elif now.weekday() > 4 and now.minute % 10 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)        
 
     # friday post for fridaysailer webhook, between 8 am and 2 pm every 10 minutes
