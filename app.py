@@ -58,8 +58,8 @@ def get_time():
 def send_images(now, sent_hr):
     # send every hour
     if now.hour > sent_hr:
-        # send until 12 pm and at end of day at 9 pm
-        if now.hour % 8 <= 4 or now.hour == 21:  
+        # send 8 am to 12 pm
+        if now.hour % 8 <= 4 and now.hour <= 12: 
             Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()    
     
     # send every 2 hours
