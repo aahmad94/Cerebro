@@ -47,7 +47,6 @@ barrons_snap = {
 }
 
 sent_hr = 0
-sent_minute = 0
 
 # configure app timezone
 def get_time():
@@ -55,25 +54,23 @@ def get_time():
     return datetime.now(ny)
 
 
-def send_images(now, sent_hr):
-    # send every hour
-    if now.hour > sent_hr:
-        # send 8 am to 12 pm
-        if now.hour % 8 <= 4 and now.hour <= 12: 
-            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()    
-    
+def send_images(now, sent_hr):    
     # send every 2 hours
-    if now.hour > sent_hr + 1:
-        # send until end of day at 9 pm
-        if now.hour <= 19:
+    if now.hour >= sent_hr + 2:
+        # send cal btwn 8 am to 12 pm
+        if now.hour % 8 <= 4 and now.hour >= 8 and now.hour <= 12: 
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()    
+        if now.hour >= 8:
             Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
+        return True
+    return False
 
 
-def fwd_tweets(now, sent_minute):
+def fwd_tweets(now):
     # fwd every weekday betweent 7 am and 5 pm every minute, else fwd every 10 minutes
-    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute > sent_minute + 1:
+    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute  % 2 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
-    elif now.weekday() > 4 and now.minute % 10 == 0:
+    elif now.minute % 10 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)        
 
     # friday post for fridaysailer webhook, between 8 am and 2 pm every 10 minutes
@@ -85,15 +82,11 @@ while True:
     now = get_time()
     if now.hour == 0 and now.minute < 10:
         sent_hr = 0
-    if now.minute == 0:
-        sent_minute = 0
 
-    send_images(now, sent_hr)
-    fwd_tweets(now, sent_minute)
+    sent_images = send_images(now, sent_hr)
+    fwd_tweets(now)
 
-    if now.hour > sent_hr:
+    if sent_images:
         sent_hr = now.hour
-    if now.minute > sent_minute:
-        sent_minute = now.minute
 
 
