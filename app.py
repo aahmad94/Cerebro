@@ -59,7 +59,7 @@ def send_images(now, sent_hr):
     if now.hour >= sent_hr + 2:
         # send cal btwn 8 am to 12 pm
         if now.hour % 8 <= 4 and now.hour >= 8 and now.hour <= 12: 
-            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap()    
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67)    
         if now.hour >= 8:
             Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
         return True

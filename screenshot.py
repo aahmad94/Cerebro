@@ -20,12 +20,12 @@ class Screenshot:
         self.modal_bool = modal_bool
         self.img_tag = img_tag
     
-    def snap(self):
+    def snap(self, zoom=90):
         if self.modal_bool:
             self.awaitModal()
         # find element on page by CSS selector
         try:
-            self.active_driver.execute_script("document.body.style.zoom='67%';")
+            self.active_driver.execute_script(f"document.body.style.zoom='{zoom}%';")
             time.sleep(2)
             if self.css_selector:
                 css_element = self.active_driver.find_element(By.CSS_SELECTOR, self.css_selector)
