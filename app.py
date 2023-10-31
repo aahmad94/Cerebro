@@ -22,8 +22,7 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 cerebro_users = ["garyblack00", "FredaDuan",
                  "lizannsonders", "SawyerMerritt", 
                  "KobeissiLetter", "friedberg", 
-                 "fundstrat", "chamath",
-                 "firstsquawk"]
+                 "fundstrat", "chamath",]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
@@ -60,7 +59,7 @@ def get_time():
 
 
 def send_images(now, sent_hr):
-    if now.hour >= sent_hr:
+    if now.hour > sent_hr:
         if now.hour >= 7 and now.hour <= 17 and (now.hour + 2) % 3 == 0:
             Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67) 
             Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
