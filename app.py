@@ -59,17 +59,16 @@ def get_time():
     return datetime.now(ny)
 
 
-def send_images(now):    
-    if now.hour == 8 or now.hour == 10 or now.hour == 12: 
-        Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67) 
-
-    if now.hour >= 7 and now.hour <= 17 and now.hour + 2 % 3 == 0:
-        Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
-        Screenshot(cerebro_webhook_url, reuters_snap["url"], reuters_snap["css"], reuters_snap["modal"], reuters_snap["info"]).snap()
+def send_images(now, sent_hr):
+    if now.hour >= sent_hr:
+        if now.hour >= 7 and now.hour <= 17 and (now.hour + 2) % 3 == 0:
+            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67) 
+            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
+            Screenshot(cerebro_webhook_url, reuters_snap["url"], reuters_snap["css"], reuters_snap["modal"], reuters_snap["info"]).snap()
 
 def fwd_tweets(now):
     # fwd every weekday betweent 7 am and 5 pm every minute, else fwd every 10 minutes
-    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute  % 2 == 0:
+    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute % 2 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
     elif now.minute % 10 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)        
@@ -78,10 +77,14 @@ def fwd_tweets(now):
     if now.weekday() == 4 and now.hour > 8 and now.hour < 14 and now.minute % 10 == 0:
         TwitterToDiscord(fridaysailer_url, fridaysailer_users, fridaysailer_dict)
     
-
+sent_hr = 0
 while True:
     now = get_time()
     send_images(now)
     fwd_tweets(now)
+
+    if now.hour > sent_hr:
+        sent_hr = now.hour % 24
+
 
 
