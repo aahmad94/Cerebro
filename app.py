@@ -80,7 +80,7 @@ def fwd_tweets(now):
 sent_hr = 0
 while True:
     now = get_time()
-    send_images(now)
+    send_images(now, sent_hr)
     fwd_tweets(now)
 
     if now.hour > sent_hr:
