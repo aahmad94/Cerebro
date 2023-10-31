@@ -46,7 +46,12 @@ barrons_snap = {
     "info": "BARRON'S FRONT PAGE\n",
 }
 
-sent_hr = 0
+reuters_snap = {
+    "url": "https://www.reuters.com",
+    "css": False,
+    "modal": False,
+    "info": "REUTER'S FRONT PAGE\n",
+}
 
 # configure app timezone
 def get_time():
@@ -54,17 +59,13 @@ def get_time():
     return datetime.now(ny)
 
 
-def send_images(now, sent_hr):    
-    # send every 2 hours
-    if now.hour >= sent_hr + 2:
-        # send cal btwn 8 am to 12 pm
-        if now.hour % 8 <= 4 and now.hour >= 8 and now.hour <= 12: 
-            Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67)    
-        if now.hour >= 8:
-            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
-        return True
-    return False
+def send_images(now):    
+    if now.hour == 8 or now.hour == 10 or now.hour == 12: 
+        Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67) 
 
+    if now.hour >= 7 and now.hour <= 17 and now.hour + 2 % 3 == 0:
+        Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
+        Screenshot(cerebro_webhook_url, reuters_snap["url"], reuters_snap["css"], reuters_snap["modal"], reuters_snap["info"]).snap()
 
 def fwd_tweets(now):
     # fwd every weekday betweent 7 am and 5 pm every minute, else fwd every 10 minutes
@@ -80,13 +81,7 @@ def fwd_tweets(now):
 
 while True:
     now = get_time()
-    if now.hour == 0 and now.minute < 10:
-        sent_hr = 0
-
-    sent_images = send_images(now, sent_hr)
+    send_images(now)
     fwd_tweets(now)
-
-    if sent_images:
-        sent_hr = now.hour
 
 

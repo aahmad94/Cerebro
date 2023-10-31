@@ -26,7 +26,7 @@ class Screenshot:
         # find element on page by CSS selector
         try:
             self.active_driver.execute_script(f"document.body.style.zoom='{zoom}%';")
-            time.sleep(2)
+            time.sleep(4)
             if self.css_selector:
                 css_element = self.active_driver.find_element(By.CSS_SELECTOR, self.css_selector)
                 self.active_driver.execute_script(
