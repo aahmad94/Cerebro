@@ -1,4 +1,6 @@
+import os
 import time
+
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 from selenium import webdriver
@@ -78,6 +80,7 @@ class Screenshot:
     def fwd_image(self):
         webhook = DiscordWebhook(url=self.webhook_url)
         with open("assets/screenshot.png", "rb") as f:
-            webhook.add_file(file=f.read(), filename="economic_calendar.png")
+            webhook.add_file(file=f.read(), filename="screenshot.png")
         webhook.content = f"{self.img_tag} <{self.url}>"
         webhook.execute()
+        os.remove("assets/screenshot.png")
