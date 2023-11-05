@@ -84,6 +84,8 @@ while True:
 
     if now.hour > sent_hr:
         sent_hr = now.hour % 24
+    if now.hour == 1 and now.minute <= 2:
+        sent_hr = 0
 
 
 
