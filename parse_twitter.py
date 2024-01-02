@@ -112,7 +112,7 @@ class ParseTwitter:
             options.binary_location = "/usr/bin/google-chrome"
         
         service = None
-        service = Service(ChromeDriverManager().install())
+        service = Service(ChromeDriverManager().install(), options=options)
         driver = webdriver.Chrome(service=service)
         try:
             driver.get(url)
