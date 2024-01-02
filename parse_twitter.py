@@ -1,9 +1,11 @@
+import os
 import pickle
 import re
 import time
 import urllib3
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -42,7 +44,7 @@ class ParseTwitter:
 
 
     # get Twitter login credentials
-    def getCreds(self):
+    def ax(self):
         with open('assets/credentials.txt', 'r') as file:
             file_contents = file.read()
 
@@ -96,13 +98,17 @@ class ParseTwitter:
                 self.login()
 
     def driver(self, url):
+        service = None
+        if os.getenv("ENV") == "local":
+            service = Service(executable_path='assets/chromedriver.app/Contents/MacOS/driver')
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(options=options, service=service)
+        print("driver installed")
         try:
             driver.get(url)
             time.sleep(2)
@@ -212,7 +218,7 @@ class ParseTwitter:
             print(f"User {self.user} could not be found in search bar")
             print(e)
         try:
-            self.getCreds()
+            self.ax()
             self.loadSessionCookies()
             self.active_driver.get(f"https://x.com/{self.user}")
             self.wait()
