@@ -102,7 +102,7 @@ class ParseTwitter:
         if os.getenv("ENV") == "local":
             service = Service(executable_path='assets/chromedriver.app/Contents/MacOS/driver')
         options = Options()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
