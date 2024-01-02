@@ -13,6 +13,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 class ParseTwitter:
     # required login to parse twitter
@@ -98,17 +99,16 @@ class ParseTwitter:
                 self.login()
 
     def driver(self, url):
-        service = None
-        if os.getenv("ENV") == "local":
-            service = Service(executable_path='assets/chromedriver.app/Contents/MacOS/driver')
         options = Options()
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(options=options, service=service)
-        print("driver installed")
+        
+        service = None
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service)
         try:
             driver.get(url)
             time.sleep(2)
@@ -162,23 +162,22 @@ class ParseTwitter:
 
             for i in range(len(tweets)):
                 tweet = tweets[i]
-                 
                 y_offset += tweet.size["height"]
                 if "Pinned" not in tweet.text and "Promoted" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
 
             if (tweet):
+                print(tweet.text)                 
                 try:
                     avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
                     self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
 
-                    y_offset -= int(tweet.size["height"] * 0.35)
-
                     self.action.pause(1)
-                    self.action.scroll(0, 0, 0, y_offset)
+                    self.action.move_to_element(tweet)
+                    self.action.pause(1)
                     self.action.move_to_element(avatar)
-                    self.action.move_by_offset(0, 50)
+                    self.action.move_by_offset(0, 75)
                     self.action.click()
                     self.action.perform()
 
