@@ -33,7 +33,7 @@ class ParseTwitter:
     active_driver = None
     action = None
 
-    def __init__(self, user="FridaySailer"):
+    def __init__(self, user):
         self.user = user
         self.active_driver = self.driver(self.x_url)
         self.action = ActionChains(self.active_driver)
@@ -45,7 +45,7 @@ class ParseTwitter:
 
 
     # get Twitter login credentials
-    def ax(self):
+    def setLoginCredentials(self):
         with open('assets/credentials.txt', 'r') as file:
             file_contents = file.read()
 
@@ -98,22 +98,17 @@ class ParseTwitter:
             if "login" in self.active_driver.current_url:
                 self.login()
 
+
     def driver(self, url):
         options = Options()
-
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
-        options.add_argument(f'user-agent={user_agent}')
-        options.add_argument(f'--disable-dev-shm-usage')
+        options.add_argument(f'user-agent={user_agent}')        
+        service = Service(ChromeDriverManager().install(), options=options)
+        driver = webdriver.Chrome(service=service, options = options)
 
-        if os.getenv("ENV") == "prod":
-            options.binary_location = "/usr/bin/google-chrome"
-        
-        service = None
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=options)
         try:
             driver.get(url)
             time.sleep(2)
@@ -137,8 +132,8 @@ class ParseTwitter:
             print(e)
             return self.tweet_info             
 
-
     # after logging in, from Twitter feed, use search bar to find user
+    # --- no longer needed ---
     def goToUser(self):
         try:
             self.wait()
@@ -217,12 +212,7 @@ class ParseTwitter:
     # handle login flow and query user page, then parse tweets via action
     def initAction(self, action):
         try:
-            self.awaitElement("div[aria-labelledby='modal-header']")
-        except NoSuchElementException as e:
-            print(f"User {self.user} could not be found in search bar")
-            print(e)
-        try:
-            self.ax()
+            self.setLoginCredentials()
             self.loadSessionCookies()
             self.active_driver.get(f"https://x.com/{self.user}")
             self.wait()
