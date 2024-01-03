@@ -105,7 +105,6 @@ class ParseTwitter:
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
-        options.add_argument(f'user-agent={user_agent}')        
         service = Service(ChromeDriverManager().install(), options=options)
         driver = webdriver.Chrome(service=service, options = options)
 
