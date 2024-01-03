@@ -131,6 +131,7 @@ class ParseTwitter:
             print(e)
             return self.tweet_info             
 
+
     # after logging in, from Twitter feed, use search bar to find user
     # --- no longer needed ---
     def goToUser(self):
