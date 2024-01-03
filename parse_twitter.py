@@ -76,6 +76,7 @@ class ParseTwitter:
                 raise Exception('Password field input element could not be found.')
         except:
             print(f"User login input element not found for user: {self.user}. Handling the error...")
+            print(self.active_driver.getCurrentUrl())
     
 
     def getSessionCookies(self):
@@ -104,7 +105,6 @@ class ParseTwitter:
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
-        user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
         options.add_argument(f'user-agent={user_agent}')        
         service = Service(ChromeDriverManager().install(), options=options)
         driver = webdriver.Chrome(service=service, options = options)

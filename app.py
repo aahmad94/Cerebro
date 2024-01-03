@@ -60,7 +60,7 @@ def send_images(now, sent_hr):
 
 
 def fwd_tweets(now):
-    # fwd every weekday betweent 7 am and 5 pm every minute, else fwd every 10 minutes
+    # fwd every weekday between 7 am and 5 pm every minute, else fwd every 10 minutes
     if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute % 2 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
     elif now.minute % 10 == 0:
