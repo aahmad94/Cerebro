@@ -45,8 +45,8 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following Tweet (along with any acronyms if needed) in as little number of words possible. \
-                  If you don't have enough content to go off of answer with 'Nothing to summarize'. \n\n"
+        prompt = "Explain the following tweet (along with any acronyms if needed) in as little number of words possible. \
+                  If you can't quite understand the tweet, answer with 'Nothing to summarize'. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
