@@ -32,9 +32,12 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                gpt_result = f"{self.ask_gpt(tweet_text)}"
+                gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
+                if len(content) < 250:
+                    gpt_result = '' 
+                
                 if len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}\n\n\n__ChatGPT__\n{gpt_result}```")
+                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}{gpt_result}```")
                     self.fwd_tweet(f"<{tweet_url}>")
 
 
