@@ -32,9 +32,9 @@ class TwitterToDiscord:
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
-                summary = f"{self.ask_gpt(tweet_text)}"
+                gpt_result = f"{self.ask_gpt(tweet_text)}"
                 if len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(f"```\n{user.upper()}\n\n{content}\n\n\nChatGPT Summary:\n{summary}```")
+                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}\n\n\n__ChatGPT__:\n{gpt_result}```")
                     self.fwd_tweet(f"<{tweet_url}>")
 
 
@@ -45,7 +45,7 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following Tweet in as little number of words possible: \n\n"
+        prompt = "Explain the following Tweet along with any acronyms used in as little number of words possible: \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
