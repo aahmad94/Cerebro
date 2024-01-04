@@ -34,7 +34,7 @@ class TwitterToDiscord:
                 self.tweets[tweet_url] = True
                 gpt_result = f"{self.ask_gpt(tweet_text)}"
                 if len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}\n\n\n__ChatGPT__:\n{gpt_result}```")
+                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}\n\n\n__ChatGPT__\n{gpt_result}```")
                     self.fwd_tweet(f"<{tweet_url}>")
 
 
@@ -45,7 +45,8 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following Tweet along with any acronyms used in as little number of words possible: \n\n"
+        prompt = "Explain the following Tweet (along with any acronyms if needed) in as little number of words possible. \
+                  If you don't have enough content to go off of answer with 'Nothing to summarize'. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
