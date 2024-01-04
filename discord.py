@@ -29,9 +29,6 @@ class TwitterToDiscord:
             tweet_text = parser.tweet_info["text"]
             content = f"{self.shorten_post(tweet_text)}"
 
-            if len(content) >= 250:
-                content += "..."
-
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
