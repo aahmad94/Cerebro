@@ -56,7 +56,6 @@ def send_images(now, sent_hr):
     if now.hour > sent_hr:
         if now.hour >= 7 and now.hour <= 17 and (now.hour + 2) % 3 == 0:
             Screenshot(cerebro_webhook_url, market_watch_snap["url"], market_watch_snap["css"], market_watch_snap["modal"], market_watch_snap["info"]).snap(67) 
-            Screenshot(cerebro_webhook_url, barrons_snap["url"], barrons_snap["css"], barrons_snap["modal"], barrons_snap["info"]).snap()
 
 
 def fwd_tweets(now):
