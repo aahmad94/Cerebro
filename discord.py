@@ -28,7 +28,7 @@ class TwitterToDiscord:
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
             content = f"{self.shorten_post(tweet_text)}"
-
+            print(tweet_text)
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
@@ -48,13 +48,14 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following tweet (along with any acronyms if needed) in as little number of words possible. \
-                  If you can't quite understand the tweet, answer with 'Nothing to summarize'. \n\n"
+        prompt = "Explain the following tweet (along with any acronyms if needed) in as little number of words possible, \
+                  use bullet points to structure your thoughts. If you can't quite understand the tweet, \
+                  answer with 'Nothing to summarize'. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
             chat = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=messages)
+                model="gpt-4-turbo", messages=messages)
             print("ChatGPT API endpoint success")
         except: 
             print("ChatGPT API endpoint failure\n")

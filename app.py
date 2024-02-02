@@ -21,7 +21,7 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 # ToDo: change 'users' terminology (maybe Tweeters)
 cerebro_users = ["garyblack00", "FredaDuan",
                  "lizannsonders", "SawyerMerritt", 
-                 "KobeissiLetter", "friedberg", 
+                 "KobeissiLetter", "MarioNawfal", 
                  "fundstrat", "chamath", 
                  "StockMKTNewz"]
 fridaysailer_users = ["fridaysailer"]
