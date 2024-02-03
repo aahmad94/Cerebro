@@ -23,12 +23,15 @@ class TwitterToDiscord:
             
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
-            content = f"{self.shorten_post(tweet_text)}"
+            shortened = self.shorten_post(tweet_text)
+            content, remainder  = shortened[0], shortened[1]
+            
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
+                # mark url as visited
                 self.tweets[tweet_url] = True
                 gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
-                if len(content) < 200:
+                if remainder < 50:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
@@ -36,14 +39,16 @@ class TwitterToDiscord:
 
 
     def shorten_post(self, text, trim_len=200):
+        remainder = len(text) - trim_len
         if len(text) > trim_len:
-            return f"{text[:trim_len]}... ({len(text) - 200} characters remaining, see summary below.)"
-        return text
+            trimmed = f"{text[:trim_len]}... {remainder} characters remaining, see summary below)"
+            return [trimmed, remainder]
+        return [text, 0]
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following tweet (along with any acronyms if needed) in as little number of words possible, \
-                  use bullet points to structure your thoughts. If you can't quite understand the tweet, \
+        prompt = "Explain the following tweet (along with any acronyms if needed) in as concisely as you can. \
+                  Use bullet points to structure your thoughts. If you can't quite understand the tweet, \
                   answer with 'Nothing to summarize'. \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
