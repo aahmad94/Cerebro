@@ -33,7 +33,7 @@ class TwitterToDiscord:
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 self.tweets[tweet_url] = True
                 gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
-                if len(content) < 250:
+                if len(content) < 200:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
@@ -41,9 +41,9 @@ class TwitterToDiscord:
                     self.fwd_tweet(f"<{tweet_url}>")
 
 
-    def shorten_post(self, text, trim_len=250):
+    def shorten_post(self, text, trim_len=200):
         if len(text) > trim_len:
-            return f"{text[:trim_len]}..."
+            return f"{text[:trim_len]}......"
         return text
 
 
@@ -55,7 +55,7 @@ class TwitterToDiscord:
         
         try:
             chat = openai.ChatCompletion.create(
-                model="gpt-4-turbo", messages=messages)
+                model="gpt-4-turbo-preview", messages=messages)
             print("ChatGPT API endpoint success")
         except: 
             print("ChatGPT API endpoint failure\n")
