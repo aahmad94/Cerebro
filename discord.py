@@ -32,7 +32,7 @@ class TwitterToDiscord:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}{gpt_result}```\n<{tweet_url}>")
+                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}{gpt_result}```<{tweet_url}>")
 
 
     def shorten_post(self, text, trim_len=200):
