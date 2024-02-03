@@ -64,6 +64,7 @@ class TwitterToDiscord:
                    
 
     def fwd_tweet(self, content):
-        print(f"\n\nDATETIME - {datetime.datetime.now()}")
+        # add timestamp for logs
+        print(f"DATETIME: {datetime.now()}")
         print(f"CONTENT:\n {content}\n")
         DiscordWebhook(url=self.webhook_url, content=content).execute()
