@@ -10,8 +10,6 @@ class TwitterToDiscord:
 
     def __init__(self, webhook_url, users, tweets):
         load_dotenv()        
-        # TODO: The 'openai.organization' option isn't read in the client API. You will need to pass it when you instantiate the client, e.g. 'OpenAI(organization="org-zeOV533K5hdpS1CFEc4Ph8Mh")'
-        # openai.organization="org-zeOV533K5hdpS1CFEc4Ph8Mh"
         self.tweets = tweets
         self.webhook_url = webhook_url
         self.users = users
