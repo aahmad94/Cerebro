@@ -1,5 +1,5 @@
 import os
-import openai
+from openai import OpenAI
 import time
 
 from parse_twitter import ParseTwitter
@@ -11,9 +11,12 @@ class TwitterToDiscord:
 
     def __init__(self, webhook_url, users, tweets):
         load_dotenv()
-        openai.organization = "org-zeOV533K5hdpS1CFEc4Ph8Mh"
-        openai.api_key = os.getenv("OPENAI_KEY")
+        self.client = OpenAI(
+            organization = "org-zeOV533K5hdpS1CFEc4Ph8Mh",
+            api_key = os.getenv("OPENAI_KEY")
+        )
         
+        self.client = None
         self.tweets = tweets
         self.webhook_url = webhook_url
         self.users = users
@@ -43,7 +46,7 @@ class TwitterToDiscord:
 
     def shorten_post(self, text, trim_len=200):
         if len(text) > trim_len:
-            return f"{text[:trim_len]}......"
+            return f"{text[:trim_len]}... (see summary below)"
         return text
 
 
@@ -54,13 +57,17 @@ class TwitterToDiscord:
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
-            chat = openai.ChatCompletion.create(
-                model="gpt-4", messages=messages)
+            chat = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=messages
+            )
             print("ChatGPT API endpoint success")
         except: 
             print("ChatGPT API endpoint failure\n")
             return ''
 
+        print("--- CHAT GPT RESPONSE ---")
+        print(chat)
         return chat.choices[0].message.content
                    
 
