@@ -37,7 +37,7 @@ class TwitterToDiscord:
 
     def shorten_post(self, text, trim_len=200):
         if len(text) > trim_len:
-            return f"{text[:trim_len]}... (see summary below)"
+            return f"{text[:trim_len]}... ({len(text) - 200} characters remaining, see summary below.)"
         return text
 
 
