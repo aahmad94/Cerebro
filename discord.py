@@ -55,7 +55,7 @@ class TwitterToDiscord:
         
         try:
             chat = openai.ChatCompletion.create(
-                model="gpt-4-turbo-preview", messages=messages)
+                model="gpt-4", messages=messages)
             print("ChatGPT API endpoint success")
         except: 
             print("ChatGPT API endpoint failure\n")
