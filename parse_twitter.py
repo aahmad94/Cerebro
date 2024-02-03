@@ -102,7 +102,7 @@ class ParseTwitter:
 
     def driver(self, url):
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument("--no-sandbox")
         options.add_argument("--window-size=1920,1080")
         service = Service(ChromeDriverManager().install(), options=options)

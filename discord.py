@@ -1,22 +1,17 @@
-import os
 from openai import OpenAI
-import time
-
+import os
 from parse_twitter import ParseTwitter
 from datetime import datetime
 from discord_webhook import DiscordWebhook
 from dotenv import load_dotenv
 
+
 class TwitterToDiscord:
 
     def __init__(self, webhook_url, users, tweets):
-        load_dotenv()
-        self.client = OpenAI(
-            organization = "org-zeOV533K5hdpS1CFEc4Ph8Mh",
-            api_key = os.getenv("OPENAI_KEY")
-        )
-        
-        self.client = None
+        load_dotenv()        
+        # TODO: The 'openai.organization' option isn't read in the client API. You will need to pass it when you instantiate the client, e.g. 'OpenAI(organization="org-zeOV533K5hdpS1CFEc4Ph8Mh")'
+        # openai.organization="org-zeOV533K5hdpS1CFEc4Ph8Mh"
         self.tweets = tweets
         self.webhook_url = webhook_url
         self.users = users
@@ -57,20 +52,20 @@ class TwitterToDiscord:
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
-            chat = self.client.chat.completions.create(
+            client = OpenAI(api_key=os.getenv("OPENAI_KEY"), organization="org-zeOV533K5hdpS1CFEc4Ph8Mh")
+            chat = client.chat.completions.create(
                 model="gpt-4",
                 messages=messages
             )
             print("ChatGPT API endpoint success")
-        except: 
-            print("ChatGPT API endpoint failure\n")
+        except Exception as e:
+            print("\n\nChatGPT API endpoint failure\n")
+            print(e)
             return ''
-
-        print("--- CHAT GPT RESPONSE ---")
-        print(chat)
         return chat.choices[0].message.content
                    
 
     def fwd_tweet(self, content):
+        print(f"\n\nDATETIME - {datetime.datetime.now()}")
         print(f"CONTENT:\n {content}\n")
         DiscordWebhook(url=self.webhook_url, content=content).execute()
