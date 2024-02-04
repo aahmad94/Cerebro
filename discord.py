@@ -25,7 +25,7 @@ class TwitterToDiscord:
             tweet_text = parser.tweet_info["text"]
             shortened = self.shorten_post(tweet_text)
             content, remainder  = shortened[0], shortened[1]
-            
+
             # only fwd tweets not in dict & only after dict is initialized w/ n items
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 # mark url as visited
@@ -41,7 +41,7 @@ class TwitterToDiscord:
     def shorten_post(self, text, trim_len=200):
         remainder = len(text) - trim_len
         if len(text) > trim_len:
-            trimmed = f"{text[:trim_len]}... {remainder} characters remaining, see summary below)"
+            trimmed = f"{text[:trim_len]}... ({remainder} characters remaining, see summary below)"
             return [trimmed, remainder]
         return [text, 0]
 
