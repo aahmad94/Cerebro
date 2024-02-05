@@ -6,6 +6,8 @@ from discord_webhook import DiscordWebhook
 from dotenv import load_dotenv
 
 
+NOTHING = "--NOTHING--"
+
 class TwitterToDiscord:
 
     def __init__(self, webhook_url, users, tweets):
@@ -14,7 +16,6 @@ class TwitterToDiscord:
         self.webhook_url = webhook_url
         self.users = users
         self.get_user_tweets()
-        self.NOTHING = "--NOTHING--"
 
 
     def get_user_tweets(self):
@@ -32,7 +33,7 @@ class TwitterToDiscord:
                 # mark url as visited
                 self.tweets[tweet_url] = True
                 gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
-                if self.NOTHING in gpt_result:
+                if NOTHING in gpt_result:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
@@ -50,7 +51,7 @@ class TwitterToDiscord:
     def ask_gpt(self, tweet_text):
         prompt = f"Explain the following tweet (along with any acronyms if needed or people mentioned) as concisely as you can. \
                   Use bullet points to structure your thoughts. If you can't quite understand the tweet or \
-                  if you think no additional context is needed, respond with '{self.NOTHING}': \n\n"
+                  if you think no additional context is needed, respond with '{NOTHING}': \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
