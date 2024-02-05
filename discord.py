@@ -14,6 +14,7 @@ class TwitterToDiscord:
         self.webhook_url = webhook_url
         self.users = users
         self.get_user_tweets()
+        self.NOTHING = "--NOTHING--"
 
 
     def get_user_tweets(self):
@@ -31,7 +32,7 @@ class TwitterToDiscord:
                 # mark url as visited
                 self.tweets[tweet_url] = True
                 gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
-                if remainder < 50:
+                if self.NOTHING in gpt_result:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
@@ -41,15 +42,15 @@ class TwitterToDiscord:
     def shorten_post(self, text, trim_len=200):
         remainder = len(text) - trim_len
         if len(text) > trim_len:
-            trimmed = f"{text[:trim_len]}... ({remainder} characters remaining, see summary below)"
+            trimmed = f"{text[:trim_len]}... ({remainder} characters remaining)"
             return [trimmed, remainder]
         return [text, 0]
 
 
     def ask_gpt(self, tweet_text):
-        prompt = "Explain the following tweet (along with any acronyms if needed) in as concisely as you can. \
-                  Use bullet points to structure your thoughts. If you can't quite understand the tweet, \
-                  answer with 'Nothing to summarize'. \n\n"
+        prompt = f"Explain the following tweet (along with any acronyms if needed or people mentioned) as concisely as you can. \
+                  Use bullet points to structure your thoughts. If you can't quite understand the tweet or \
+                  if you think no additional context is needed, respond with '{self.NOTHING}': \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
