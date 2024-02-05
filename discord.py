@@ -49,9 +49,11 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = f"Explain the following tweet (along with any acronyms if needed or people mentioned) as concisely as you can. \
-                  Use bullet points to structure your thoughts. If you can't quite understand the tweet or \
-                  if you think no additional context is needed, respond with '{NOTHING}': \n\n"
+        prompt = f"Provide any additional context for the following tweet as concisely as you can \
+                  (along with any acronyms if needed or people mentioned). If the tweet is long or over 500 \
+                  characters, you may concisely summarize it. Use bullet points to structure your thoughts. \
+                  If you can't quite understand the tweet or if you think no additional context is needed, \
+                  respond with '{NOTHING}': \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]
         
         try:
