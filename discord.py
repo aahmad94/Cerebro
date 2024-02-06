@@ -37,7 +37,7 @@ class TwitterToDiscord:
                     gpt_result = '' 
                 
                 if len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(f"```\n__{user.upper()}__\n\n{content}{gpt_result}```<{tweet_url}>")
+                    self.fwd_tweet(f"{user.upper()}\n\n{content}```{gpt_result}```<{tweet_url}>")
 
 
     def shorten_post(self, text, trim_len=200):
@@ -50,8 +50,8 @@ class TwitterToDiscord:
 
     def ask_gpt(self, tweet_text):
         prompt = f"Provide any additional context for the following tweet as concisely as you can \
-                  (along with any acronyms if needed or people mentioned). If the tweet is long or over 500 \
-                  characters, you may concisely summarize it. Use bullet points to structure your thoughts. \
+                  (along with any acronyms and people mentioned if they're not obvious). If the tweet is long \
+                  or over 600 characters, you may concisely summarize it. Use bullet points to structure your thoughts. \
                   If you can't quite understand the tweet or if you think no additional context is needed, \
                   respond with '{NOTHING}': \n\n"
         messages = [{"role": "user", "content": prompt + tweet_text}]

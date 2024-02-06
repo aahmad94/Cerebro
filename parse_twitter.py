@@ -166,9 +166,12 @@ class ParseTwitter:
                 if "Pinned" not in tweet.text and "Promoted" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
                     break
-
+        except Exception as e:
+            print(f"Elements not found for user: {self.user}")
+            print(e)
+            tweets = []
+        finally:
             if (tweet):
-                print(tweet.text)                 
                 try:
                     avatar = tweet.find_element(By.CSS_SELECTOR, "[data-testid='Tweet-User-Avatar']")
                     self.tweet_info["date"] = tweet.find_element(By.CSS_SELECTOR, 'time').text
@@ -187,17 +190,12 @@ class ParseTwitter:
                     self.tweet_info["tweet_url"] = self.active_driver.execute_script("return window.location.href;")
                     
                     self.active_driver.quit()
-                except: 
+                except Exception as e: 
                     print(f"Could not click into link itself for user {self.user}")
-                    
-        except NoSuchElementException:
-            print(f"Element not found for user: {self.user}")
-            return self.tweet_info
-        except urllib3.exceptions.MaxRetryError as e:
-            print("MaxRetryError occurred:", str(e))
-            return self.tweet_info
-        
-        return self.tweet_info
+                    print(e)
+                finally:
+                    self.active_driver.quit()
+                    return self.tweet_info
 
 
     def formatUrl(self, url):
