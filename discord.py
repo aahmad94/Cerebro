@@ -40,7 +40,7 @@ class TwitterToDiscord:
                     self.fwd_tweet(f"{user.upper()}\n\n{content}```{gpt_result}```<{tweet_url}>")
 
 
-    def shorten_post(self, text, trim_len=200):
+    def shorten_post(self, text, trim_len=300):
         remainder = len(text) - trim_len
         if len(text) > trim_len:
             trimmed = f"{text[:trim_len]}... ({remainder} characters remaining)"

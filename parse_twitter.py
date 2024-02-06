@@ -221,6 +221,5 @@ class ParseTwitter:
             self.awaitElement(self.tweet_selector)
         except:
             print(f"Unable to locate tweet element for user: {self.user}")
-            print(f"Unable to locate tweet element for user: {self.user}")
         finally:
             action()
