@@ -32,13 +32,12 @@ class TwitterToDiscord:
             if tweet_text and tweet_url and not self.tweets.get(tweet_url):
                 # mark url as visited
                 self.tweets[tweet_url] = True
-                gpt_result = f"\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}"
-                if NOTHING in gpt_result:
-                    gpt_result = '' 
+                gpt_result = f"```\n\n\n__ChatGPT__\n\n{self.ask_gpt(tweet_text)}```"   
                 
-                if len(self.tweets) >= len(self.users):
+                # only send tweets that gpt can make sense of (filter out nonsense tweets)            
+                if not NOTHING in gpt_result and len(self.tweets) >= len(self.users):
                     self.fwd_tweet(
-                        f"{user.upper()}\n<{tweet_url}>\n\n{content}```{gpt_result}```\n")
+                        f"{user.upper()}\n<{tweet_url}>\n\n{content}{gpt_result}\n\n")
 
 
     def shorten_post(self, text, trim_len=300):
