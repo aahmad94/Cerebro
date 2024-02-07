@@ -153,11 +153,11 @@ class ParseTwitter:
 
 
     def getLastTweetAction(self):
+        tweet = None
         try: 
             self.awaitElement(self.tweet_selector)
             tweets = self.active_driver.find_elements(
                 By.CSS_SELECTOR, self.tweet_selector)
-            tweet = None
             y_offset = 0
 
             for i in range(len(tweets)):
