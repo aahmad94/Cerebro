@@ -37,7 +37,7 @@ class TwitterToDiscord:
                 # only send tweets that gpt can make sense of (filter out nonsense tweets)            
                 if not NOTHING in gpt_result and len(self.tweets) >= len(self.users):
                     self.fwd_tweet(
-                        f"{user.upper()}\n<{tweet_url}>\n\n{content}{gpt_result}\n\n")
+                        f"- {user.upper()}\n<{tweet_url}>\n\n{content}{gpt_result}")
 
 
     def shorten_post(self, text, trim_len=300):
