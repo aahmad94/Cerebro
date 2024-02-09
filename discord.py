@@ -37,7 +37,7 @@ class TwitterToDiscord:
                 # only send tweets that gpt can make sense of (filter out nonsense tweets)            
                 if not NOTHING in gpt_result and len(self.tweets) >= len(self.users):
                     self.fwd_tweet(
-                        f"{user.upper()}\n<{tweet_url}>\n\n{content}{gpt_result}")
+                        f"**{user.upper()}**\n<{tweet_url}>\n\n{content}{gpt_result}")
 
 
     def shorten_post(self, text, trim_len=300):
@@ -49,8 +49,8 @@ class TwitterToDiscord:
 
 
     def ask_gpt(self, tweet_text):
-        prompt = f"Provide any additional context if it's not obvious for the following tweet as concisely as you can, aim for < 250 words. \
-                   with any acronyms and people mentioned if they're not obvious). If the tweet is long \
+        prompt = f"Provide any additional context if it's not obvious for the following tweet as concisely as you can, aim for < 100 words. \
+                  Include any acronyms and people mentioned if they're not obvious or commonly known. If the tweet is long \
                   or over 600 characters, you may concisely summarize it. Use bullet points to structure your thoughts. \
                   If you can't quite understand the tweet or if you think no additional context is needed, \
                   respond with '{NOTHING}': \n\n"
