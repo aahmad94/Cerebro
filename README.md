@@ -2,6 +2,8 @@
 
 ## Monitor X users, summarize their latest tweets via ChatGPT and forward to a Discord group
 
+<img src="assets/demo.png" width="1024" height="665.6"/>
+
 ## Forward screenshots of webpages at some cadance to a Discord group (new, WIP)
 
 Twitter API base tier is write only and we would be unable to use the API to get the last n tweets from the user. As such our workaround is to try to scrape the URL from the user's Twitter page. 
