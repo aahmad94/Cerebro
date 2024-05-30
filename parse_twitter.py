@@ -104,7 +104,7 @@ class ParseTwitter:
         options = Options()
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
-        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--window-size=1920,1920")
         service = Service(ChromeDriverManager().install(), options=options)
         driver = webdriver.Chrome(service=service, options = options)
 
@@ -165,6 +165,8 @@ class ParseTwitter:
                 y_offset += tweet.size["height"]
                 if "Pinned" not in tweet.text and "Promoted" not in tweet.text:
                     self.tweet_selector += f":nth-of-type({i+1})"
+                    print(self.tweet_selector)
+                    print(tweet.text)
                     break
         except Exception as e:
             print(f"Elements not found for user: {self.user}")
@@ -210,8 +212,10 @@ class ParseTwitter:
     # handle login flow and query user page, then parse tweets via action
     def initAction(self, action):
         try:
-            self.setLoginCredentials()
-            self.loadSessionCookies()
+            # login no longer required -- still useful to give access to Cerebro to subsriber only posts
+            # TODO: fix suspicious login prevented prompt/properly load in cookies
+            # self.setLoginCredentials()
+            # self.loadSessionCookies()
             self.active_driver.get(f"https://x.com/{self.user}")
             self.wait()
         except:

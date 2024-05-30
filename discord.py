@@ -25,19 +25,21 @@ class TwitterToDiscord:
             
             tweet_url = parser.tweet_info["tweet_url"]
             tweet_text = parser.tweet_info["text"]
-            shortened = self.shorten_post(tweet_text)
-            content, remainder  = shortened[0], shortened[1]
 
-            # only fwd tweets not in dict & only after dict is initialized w/ n items
-            if tweet_text and tweet_url and not self.tweets.get(tweet_url):
-                # mark url as visited
-                self.tweets[tweet_url] = True
-                gpt_result = f"```\n{self.ask_gpt(tweet_text)}```"   
-                
-                # only send tweets that gpt can make sense of (filter out nonsense tweets)            
-                if not NOTHING in gpt_result and len(self.tweets) >= len(self.users):
-                    self.fwd_tweet(
-                        f"**{user.upper()}**\n<{tweet_url}>\n\n{content}{gpt_result}")
+            if tweet_text:
+                shortened = self.shorten_post(tweet_text)
+                content, remainder  = shortened[0], shortened[1]
+
+                # only fwd tweets not in dict & only after dict is initialized w/ n items
+                if tweet_url and not self.tweets.get(tweet_url):
+                    # mark url as visited
+                    self.tweets[tweet_url] = True
+                    gpt_result = f"```\n{self.ask_gpt(tweet_text)}```"   
+                    
+                    # only send tweets that gpt can make sense of (filter out nonsense tweets)            
+                    if not NOTHING in gpt_result and len(self.tweets) >= len(self.users):
+                        self.fwd_tweet(
+                            f"**{user.upper()}**\n<{tweet_url}>\n\n{content}{gpt_result}")
 
 
     def shorten_post(self, text, trim_len=300):
