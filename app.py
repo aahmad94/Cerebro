@@ -19,11 +19,9 @@ fridaysailer_url = file_contents[fridaysailer_index + len('fridaysailer_url='):]
 
 # ToDo: create API endpoint to modify users list
 # ToDo: change 'users' terminology (maybe Tweeters)
-cerebro_users = ["garyblack00", "FredaDuan",
-                 "lizannsonders", "SawyerMerritt", 
+cerebro_users = [ 
                  "KobeissiLetter", "DeItaone",
-                 "fundstrat", "chamath", 
-                 "StockMKTNewz", "davidsacks"]
+                ]
 fridaysailer_users = ["fridaysailer"]
 football_users = ["VALORANTLeaksEN", "PlayOverwatch"]
 
@@ -33,9 +31,9 @@ football_dict = {}
 
 # arguments to instantiate Screenshot class with to be able to generate and fwd image
 market_watch_snap = {
-    "url": "https://www.marketwatch.com/economy-politics/calendar?mod=side_nav",
-    "css": ".element--textblock",
-    "modal": True,
+    "url": "https://tradingeconomics.com/united-states/calendar",
+    "css": ".col-xl-8",
+    "modal": False,
     "info": "ECONOMIC CALENDAR\n",
 }
 
@@ -60,7 +58,7 @@ def send_images(now, sent_hr):
 
 def fwd_tweets(now):
     # fwd every weekday between 7 am and 5 pm every minute, else fwd every 10 minutes
-    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute % 2 == 0:
+    if now.weekday() <= 4 and now.hour >= 7 and now.hour <= 17 and now.minute % 5 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
     elif now.minute % 10 == 0:
         TwitterToDiscord(cerebro_webhook_url, cerebro_users, cerebro_dict)
